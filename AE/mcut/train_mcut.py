@@ -9,30 +9,23 @@ from ml4co_kit import Trainer
 from model import UECOModel, UECOEncoder, COExpanderDecoder
 from env import COExpanderEnv
 
-##########################
-#    Training Configs    #
-##########################
 
-TRAIN_TYPE = ("MCl", "RB", "800-1200")
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(repo_folder, "data"))
-TRAIN_DATA_ROOT = os.environ.get("UECO_TRAIN_DATA_ROOT", os.path.join(repo_folder, "train_data"))
+TRAIN_TYPE = ("MCut", "BA", "800-1200")
 
 TRAIN_FOLDER_DICT = {
-    ("MCl", "RB", "200-300"): os.path.join(TRAIN_DATA_ROOT, "MCl", "MCl-RB-SMALL_GUROBI-60s"),
-    ("MCl", "RB", "800-1200"): os.path.join(TRAIN_DATA_ROOT, "MCl", "MCl-RB-LARGE_GUROBI-300s"),
+    ("MCut", "BA", "200-300"): "../../data/train/MCut/MCut_BA-SMALL_Gurobi-60s",
+    ("MCut", "BA", "800-1200"): "../../data/train/MCut/MCut_BA-LARGE_Gurobi-300s",
 }
 
 VAL_PATH_DICT = {
-    ("MCl", "RB", "200-300"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-small_gurobi_19.082.txt"),
-    ("MCl", "RB", "800-1200"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-large_gurobi-300s_40.182.txt"),
-    ("MCl", "RB", "2000-3000"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-gaint_gurobi-3600s_81.520.txt"),
+    ("MCut", "BA", "200-300"): "../../data/test/MCut/mcut_ba-small_gurobi_60s_727.844.txt",
+    ("MCut", "BA", "800-1200"): "../../data/test/MCut/mcut_ba-large_gurobi_300s_2936.886.txt",
 }
-
 
 encoder_params = {
     "embedding_dim": 256,
     "num_gcn_layers": 3,
-    "num_att_layers": 3, # 3 for RB-800-1200
+    "num_att_layers": 4,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,
@@ -47,21 +40,17 @@ VAL_SAMPLES_DICT = {
 
 BATCH_SIZE_DICT = {
     "200-300": 8,
-    "800-1200": 2
+    "800-1200": 4
 }
-
-##########################
-#          Main          #
-##########################
 
 if __name__ == "__main__":
     timestamp = time.time() 
     formatted_time = time.strftime("%Y%m%d%H%M", time.localtime(timestamp))[-8:]
     model = UECOModel(
         env=COExpanderEnv(
-            task="MCl",
+            task="MCut",
             mode="train",
-            train_data_size=32000, # 64000 for small
+            train_data_size=128000,
             val_data_size=VAL_SAMPLES_DICT[TRAIN_TYPE[2]],
             train_batch_size=BATCH_SIZE_DICT[TRAIN_TYPE[2]],
             val_batch_size=1,
@@ -73,22 +62,22 @@ if __name__ == "__main__":
             store_data=False # set False if your server's memory is not large enough.
         ),
         encoder=UECOEncoder(
-            task="MCl",
+            task="MCut",
             paradigm="AE",
             sparse=True,
             sparse_factor=1,
             **encoder_params
         ),
         decoder=COExpanderDecoder(),
-        learning_rate=5e-5,
+        learning_rate=5e-5, # 2e-4 for 200-300
         weight_decay=5e-5,
         inference_steps=1,
-        determinate_steps=20
+        determinate_steps=1
     )
 
     run_name = f"{TRAIN_TYPE[0]}_{TRAIN_TYPE[1]}_{TRAIN_TYPE[2]}_AE_UECO_{formatted_time}"
     trainer = Trainer(
-        model=model, devices=[1, 2], max_epochs=50,
+        model=model, devices=[0,1,2], max_epochs=50,
         wandb_logger_name=run_name,
         ckpt_monitor="val/costs_avg",
         ckpt_filename="epoch={epoch}-obj={val/costs_avg:.5f}",

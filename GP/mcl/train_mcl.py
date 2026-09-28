@@ -15,18 +15,16 @@ from model import UECOModel, UECOEncoder, MClDecoder
 ##########################
 
 TRAIN_TYPE = ("MCl", "RB", "200-300")
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(repo_folder, "data"))
-TRAIN_DATA_ROOT = os.environ.get("UECO_TRAIN_DATA_ROOT", os.path.join(repo_folder, "train_data"))
 
 TRAIN_FOLDER_DICT = {
-    ("MCl", "RB", "200-300"): os.path.join(TRAIN_DATA_ROOT, "MCl", "MCl-RB-SMALL_GUROBI-60s"),
-    ("MCl", "RB", "800-1200"): os.path.join(TRAIN_DATA_ROOT, "MCl", "MCl-RB-LARGE_GUROBI-300s"),
+    ("MCl", "RB", "200-300"): "../../data/train/MCl/MCl-RB-SMALL_GUROBI-60s",
+    ("MCl", "RB", "800-1200"): "../../data/train/MCl/MCl-RB-LARGE_GUROBI-300s",
 }
 
 VAL_PATH_DICT = {
-    ("MCl", "RB", "200-300"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-small_gurobi_19.082.txt"),
-    ("MCl", "RB", "800-1200"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-large_gurobi-300s_40.182.txt"),
-    ("MCl", "RB", "2000-3000"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-gaint_gurobi-3600s_81.520.txt"),
+    ("MCl", "RB", "200-300"): "../../data/test/MCl/mcl_rb-small_gurobi_19.082.txt",
+    ("MCl", "RB", "800-1200"): "../../data/test/MCl/mcl_rb-large_gurobi-300s_40.182.txt",
+    ("MCl", "RB", "2000-3000"): "../../data/test/MCl/mcl_rb-gaint_gurobi-3600s_81.520.txt",
 }
 
 

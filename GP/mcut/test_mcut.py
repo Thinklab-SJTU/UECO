@@ -5,8 +5,8 @@ root_folder = os.path.dirname(task_folder)
 repo_folder = os.path.dirname(root_folder)
 sys.path.append(root_folder)
 from env import GNN4COEnv
-from model import UECOModel, UECOEncoder, TSPDecoder
-from solver import GNN4COTSPSolver
+from model import UECOModel, UECOEncoder, MCutDecoder
+from solver import GNN4COMCutSolver
 from tabulate import tabulate
 
 ###############################
@@ -14,29 +14,31 @@ from tabulate import tabulate
 ###############################
 
 # Problem Settings
-TASK = "TSP"
-NODES_NUM = 50
-SPARSE_FACTOR = 50
-TEST_TYPE = (TASK, "uniform", NODES_NUM)
+TASK = "MCut"
+NODES_NUM = "200-300"
+TEST_TYPE = (TASK, "BA", NODES_NUM)
 
 # Solving Settings
-DEVICE = "cuda:0"
-SOLVING_SETTINGS = ("greedy", "2opt") # Choices: [("greedy", "2opt"), ("greedy", "mcts"), ("random_mcts", None), ("mcts", None)]
-
-# Local Search Settings
-MCTS_TIME_LIMIT = 0.05 # 0.05 for TSP50 and TSP100; 1 for TSP500 and TSP1K; 5 for TSP10K
-MCTS_TYPE_FLAG = 2 # 2 for TSP50 and TSP100; 1 for TSP500, TSP1K and TSP10K, 1 for random_mcts
+DEVICE = "cuda"
+SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
 
 # Model Settings
 encoder_params = {
     "embedding_dim": 256,
     "num_gcn_layers": 3,
-    "num_att_layers": 5,
+    "num_att_layers": 4,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,
     "ms_hidden_dim": 16,
-    "dual": True
+    "dual": False
+}
+
+# Local Search Settings
+RLSA_SETTINGS_DICT = {
+    ("MCut", "BA", "200-300"): (1, 20, 1000, 1000),
+    ("MCut", "BA", "800-1200"): (1, 50, 1000, 1000),
+    ("MCut", "BA", "2000-3000"): (1, 100, 1000, 1000)
 }
 
 ###############################
@@ -47,7 +49,7 @@ def check_and_ckpt_to_pt(ckpt_path: str, save_path: str):
     if ckpt_path.split(".")[-1] == "pt":
         return ckpt_path
     import torch
-    weight = torch.load(ckpt_path, map_location=DEVICE)["state_dict"]
+    weight = torch.load(ckpt_path)["state_dict"]
     torch.save(weight, save_path)
     print(f"[TEST INFO] Saving '{ckpt_path}' to '{save_path}' done!")
     return save_path
@@ -59,49 +61,49 @@ def print_results(obj: float, ref_obj: float, gap: float, gap_std: float, avg_ti
     print(tabulate(table, headers=headers, floatfmt=".5f"))
 
 # Test File & Pretrained Weights
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(os.path.dirname(root_folder), "data"))
 TEST_FILE_DICT = {
-    ("TSP", "uniform", 50): os.path.join(DATA_ROOT, "TSP", "tsp50_concorde_5.68759.txt"),
-    ("TSP", "uniform", 100): os.path.join(DATA_ROOT, "TSP", "tsp100_concorde_7.75585.txt"),
-    ("TSP", "uniform", 500): os.path.join(DATA_ROOT, "TSP", "tsp500_concorde_16.54581.txt"),
+    ("MCut", "BA", "200-300"): "../../data/test/MCut/mcut_ba-small_gurobi_60s_727.844.txt",
+    ("MCut", "BA", "800-1200"): "../../data/test/MCut/mcut_ba-large_gurobi_300s_2936.886.txt",
 }
 
 WEIGHT_PATH_DICT = {
-    50: os.path.join(repo_folder, "weights", "TSP50_GP_UECO.pt"),
-    100: os.path.join(repo_folder, "weights", "TSP100_GP_UECO.pt"),
-    500: os.path.join(repo_folder, "weights", "TSP500_GP_UECO.pt"),
+    ("MCut", "BA", "200-300"): "../../weights/GP/mcut/MCut_BA_200-300_GP_UECO.pt",
+    ("MCut", "BA", "800-1200"): "../../weights/GP/mcut/MCut_BA_800-1200_GP_UECO.pt",
 }
-
 
 ################################
 #             Main             #
 ################################
 
+# Main
 if __name__ == "__main__":
-    solver = GNN4COTSPSolver(
+    rlsa_settings = RLSA_SETTINGS_DICT[TEST_TYPE]
+    solver = GNN4COMCutSolver(
         model=UECOModel(
             env=GNN4COEnv(
-                task=TASK, sparse_factor=SPARSE_FACTOR, device=DEVICE
+                task="MCut", mode="solve", sparse_factor=1, device=DEVICE,
             ),
             encoder=UECOEncoder(
                 task=TASK,
                 paradigm="GP",
-                sparse=SPARSE_FACTOR>0,
+                sparse=True,
                 **encoder_params
             ),
-            decoder=TSPDecoder(
-                decoding_type=SOLVING_SETTINGS[0],
+            decoder=MCutDecoder(
+                decoding_type=SOLVING_SETTINGS[0], 
                 local_search_type=SOLVING_SETTINGS[1],
-                mcts_time_limit=MCTS_TIME_LIMIT,
-                mcts_type_2opt=MCTS_TYPE_FLAG
+                rlsa_tau=rlsa_settings[0],
+                rlsa_d=rlsa_settings[1],
+                rlsa_k=rlsa_settings[2],
+                rlsa_t=rlsa_settings[3]
             ),
             weight_path=check_and_ckpt_to_pt(
-                WEIGHT_PATH_DICT[NODES_NUM],
-                save_path=os.path.join(repo_folder, "weights", f"tmp_{TASK}{NODES_NUM}_GP_UECO.pt")
+                WEIGHT_PATH_DICT[TEST_TYPE],
+                save_path=f"../../weights/GP/mcut/tmp_{TEST_TYPE}_GP_UECO.pt"
             )
         )
     )
-    print("[TEST INFO] Test started ...")
+    print(f"[TEST INFO] Test started on {DEVICE}")
     print(f"[TEST INFO] Test data: {TEST_TYPE}")
     print(f"[TEST INFO] Test setting: {SOLVING_SETTINGS}")
     solver.from_txt(TEST_FILE_DICT[TEST_TYPE], ref=True, show_time=True)

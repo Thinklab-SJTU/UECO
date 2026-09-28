@@ -60,17 +60,16 @@ def print_results(obj: float, ref_obj: float, gap: float, gap_std: float, avg_ti
     print(tabulate(table, headers=headers, floatfmt=".5f"))
 
 # Test File & Pretrained Weights
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(os.path.dirname(root_folder), "data"))
 TEST_FILE_DICT = {
-    ("TSP", "uniform", 50): os.path.join(DATA_ROOT, "TSP", "tsp50_concorde_5.68759.txt"),
-    ("TSP", "uniform", 100): os.path.join(DATA_ROOT, "TSP", "tsp100_concorde_7.75585.txt"),
-    ("TSP", "uniform", 500): os.path.join(DATA_ROOT, "TSP", "tsp500_concorde_16.54581.txt"),
+    ("TSP", "uniform", 50): "../../data/test/TSP/tsp50_concorde_5.68759.txt",
+    ("TSP", "uniform", 100): "../../data/test/TSP/tsp100_concorde_7.75585.txt",
+    ("TSP", "uniform", 500): "../../data/test/TSP/tsp500_concorde_16.54581.txt",
 }
 
 WEIGHT_PATH_DICT = {
-    50: os.path.join(repo_folder, "weights", "TSP50_AE_UECO.pt"),
-    100: os.path.join(repo_folder, "weights", "TSP100_AE_UECO.pt"),
-    500: os.path.join(repo_folder, "weights", "TSP500_AE_UECO.pt"),
+    50: "../../weights/AE/tsp/TSP50_AE_UECO.pt",
+    100: "../../weights/AE/tsp/TSP100_AE_UECO.pt",
+    500: "../../weights/AE/tsp/TSP500_AE_UECO.pt",
 }
 
 ################################
@@ -96,7 +95,7 @@ if __name__ == "__main__":
             ),
             weight_path=check_and_ckpt_to_pt(
                 WEIGHT_PATH_DICT[NODES_NUM],
-                save_path=os.path.join(repo_folder, "weights", f"tmp_{TASK}{NODES_NUM}_AE_UECO.pt")
+                save_path=f"../../weights/AE/tsp/tmp_{TASK}{NODES_NUM}_AE_UECO.pt"
             ),
             load_strict=False,
             inference_steps=INFERENCE_STEP,

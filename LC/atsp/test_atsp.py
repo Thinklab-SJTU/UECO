@@ -24,18 +24,17 @@ NUM_AUG = 16
 USE_TWO_OPT = True
 
 WEIGHT_DICT = {
-    ("ATSP", "uniform", 50): os.path.join(REPO_DIR, "weights", "ATSP50_LC_UECO.pt"),
-    ("ATSP", "uniform", 100): os.path.join(REPO_DIR, "weights", "ATSP100_LC_UECO.pt"),
-    ("ATSP", "uniform", 200): os.path.join(REPO_DIR, "weights", "ATSP200_LC_UECO.pt"),
-    ("ATSP", "uniform", 500): os.path.join(REPO_DIR, "weights", "ATSP500_LC_UECO.pt"),
+    ("ATSP", "uniform", 50): "../../weights/LC/atsp/ATSP50_LC_UECO.pt",
+    ("ATSP", "uniform", 100): "../../weights/LC/atsp/ATSP100_LC_UECO.pt",
+    ("ATSP", "uniform", 200): "../../weights/LC/atsp/ATSP200_LC_UECO.pt",
+    ("ATSP", "uniform", 500): "../../weights/LC/atsp/ATSP500_LC_UECO.pt",
 }
 
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(REPO_DIR, "data"))
 TEST_PATH_DICT = {
-    ("ATSP", "uniform", 50): os.path.join(DATA_ROOT, "ATSP", "atsp50_uniform_lkh_1000_1.55448.txt"),
-    ("ATSP", "uniform", 100): os.path.join(DATA_ROOT, "ATSP", "atsp100_uniform_lkh_1000_1.56604.txt"),
-    ("ATSP", "uniform", 200): os.path.join(DATA_ROOT, "ATSP", "atsp200_uniform_lkh_1000_1.56472.txt"),
-    ("ATSP", "uniform", 500): os.path.join(DATA_ROOT, "ATSP", "atsp500_uniform_lkh_1000_1.57345.txt"),
+    ("ATSP", "uniform", 50): "../../data/test/ATSP/atsp50_uniform_lkh_1000_1.55448.txt",
+    ("ATSP", "uniform", 100): "../../data/test/ATSP/atsp100_uniform_lkh_1000_1.56604.txt",
+    ("ATSP", "uniform", 200): "../../data/test/ATSP/atsp200_uniform_lkh_1000_1.56472.txt",
+    ("ATSP", "uniform", 500): "../../data/test/ATSP/atsp500_uniform_lkh_1000_1.57345.txt",
 }
 
 env_params = {

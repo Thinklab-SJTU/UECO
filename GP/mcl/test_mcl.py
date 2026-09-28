@@ -45,15 +45,14 @@ RLSA_SETTINGS_DICT = {
 }
 
 # Test File & Pretrained Settings
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(os.path.dirname(root_folder), "data"))
 TEST_FILE_DICT = {
-    ("MCl", "RB", "200-300"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-small_gurobi_19.082.txt"),
-    ("MCl", "RB", "800-1200"): os.path.join(DATA_ROOT, "MCl", "mcl_rb-large_gurobi-300s_40.182.txt"),
+    ("MCl", "RB", "200-300"): "../../data/test/MCl/mcl_rb-small_gurobi_19.082.txt",
+    ("MCl", "RB", "800-1200"): "../../data/test/MCl/mcl_rb-large_gurobi-300s_40.182.txt",
 }
 
 WEIGHT_PATH_DICT = {
-    ("MCl", "RB", "200-300"): os.path.join(repo_folder, "weights", "MCl_RB_200-300_GP_UECO.pt"),
-    ("MCl", "RB", "800-1200"): os.path.join(repo_folder, "weights", "MCl_RB_800-1200_GP_UECO.pt"),
+    ("MCl", "RB", "200-300"): "../../weights/GP/mcl/MCl_RB_200-300_GP_UECO.pt",
+    ("MCl", "RB", "800-1200"): "../../weights/GP/mcl/MCl_RB_800-1200_GP_UECO.pt",
 }
 
 
@@ -103,7 +102,7 @@ if __name__ == "__main__":
             ),
             weight_path=check_and_ckpt_to_pt(
                 WEIGHT_PATH_DICT[TEST_TYPE],
-                save_path=os.path.join(repo_folder, "weights", f"tmp_{TEST_TYPE}_GP_UECO.pt")
+                save_path=f"../../weights/GP/mcl/tmp_{TEST_TYPE}_GP_UECO.pt"
             )
         )
     )

@@ -1,83 +1,85 @@
 # UECO
 
-Official implementation of **UECO**, organized around the three solving paradigms used in the paper:
+**UECO: A Unified Encoder with Structure-Aware Attention Mixture via Iterative Edge Evolving for Neural Combinatorial Optimization**
 
-- `AE`: adaptive expansion
-- `GP`: global prediction
-- `LC`: local construction
+## Abstract
 
-UECO replaces the encoder/backbone inside each host pipeline while retaining the pipeline's task-specific environment, decoder, solver, state transition, action space, and feasibility handling. The repository contains only UECO training/testing entries and the released UECO weights. Baseline entries, historical experiment logs, plots, Weights & Biases records, paper/rebuttal files, and an embedded copy of ML4CO-Kit are not included.
+Despite the promise of Neural Combinatorial Optimization (NCO), recent literature has increasingly coupled decision paradigms, training objectives, and problem classes with specific backbone architectures, limiting generic model design and fair cross-paradigm evaluation. We propose UECO, a simple yet effective Unified Encoder for Combinatorial Optimization with a structure-aware attention mixture scheme, where a lightweight module defined upon graph-based locality is interleaved with conventional global node-focused attention blocks to dynamically evolve edge representations and inject local topological information into attention scores. Instead of fusing static edge features in a single step, UECO integrates local and global messages in a progressive and problem-agnostic manner. UECO works with Local Construction (LC), Global Prediction (GP), and Adaptive Expansion (AE) paradigms, across node- or edge-oriented problems, symmetric or asymmetric tasks, sparse or dense graphs, and supervised, reinforcement, or generative learning. Experiments show that replacing existing encoders with UECO improves solution quality and generalization across TSP, ATSP, CVRP, ACVRP, MIS, MaxClique, and MaxCut at multiple scales.
 
-## Environment setup
+## Method
 
-The release was validated with Python 3.8 and the local `bench4co-v2` environment. To create an equivalent Conda environment named `ueco`:
+UECO jointly maintains node and edge representations. Each layer combines global attention-based node updates with a local structure-aware update that evolves edge states. The updated edge representations are injected into the attention scores at every layer, enabling progressive interaction between global node semantics and local graph topology. Dual-channel representations support directional and asymmetric instances. The resulting encoder produces node or edge embeddings for heatmap prediction, autoregressive construction, and iterative generation.
 
-```bash
-conda create -n ueco python=3.8 -y
-conda activate ueco
+![UECO in the NCO landscape](figures/fig1.png)
 
-# Install the PyTorch/CUDA build appropriate for your machine. The validated
-# environment uses PyTorch 2.0.1 with CUDA 11.7.
-pip install torch==2.0.1 --index-url https://download.pytorch.org/whl/cu117
-pip install torch-scatter==2.1.2 torch-sparse==0.6.18 \
-  -f https://data.pyg.org/whl/torch-2.0.1+cu117.html
-pip install numpy==1.24.4 scipy==1.10.1 matplotlib==3.7.5 \
-  tqdm==4.67.1 tabulate==0.8.10 pytorch-lightning==2.0.1 \
-  ml4co-kit==0.3.3 wandb==0.20.1
-```
+![UECO architecture](figures/fig2.png)
 
-If your CUDA version differs, install matching PyTorch, `torch-scatter`, and `torch-sparse` wheels instead.
-
-## Weights and data
-
-Released checkpoints are collected in the repository-level `weights/` directory, and the test sets used by the manual evaluation entries are collected in `data/`. Both directories are intentionally ignored by Git because they contain large binary/data artifacts. Test entries resolve `../../weights` and `../../data` from their task directories, so no environment variable is required for the included tests.
-
-To override the bundled test-data location or configure external training data, set:
+## Installation
 
 ```bash
-export UECO_DATA_ROOT=/absolute/path/to/test_and_validation_data
-export UECO_TRAIN_DATA_ROOT=/absolute/path/to/training_data
+conda create --name ml4co python=3.8
+conda activate ml4co
+
+pip install torch==2.1.0
+pip install scipy==1.10.1
+pip install --no-index torch-scatter -f https://pytorch-geometric.com/whl/torch-2.1.0+cu121.html
+pip install --no-index torch-sparse -f https://pytorch-geometric.com/whl/torch-2.1.0+cu121.html
+pip install --no-index torch-spline-conv -f https://pytorch-geometric.com/whl/torch-2.1.0+cu121.html
+pip install --no-index torch-cluster -f https://pytorch-geometric.com/whl/torch-2.1.0+cu121.html
+
+pip install ml4co-kit==0.3.3
+pip install wandb==0.16.3
+pip install tensordict==0.2.0
+pip install pytorch-lightning==2.1.0
+pip install einops==0.8.0
+pip install matplotlib tqdm scikit-learn
 ```
 
-The expected subdirectories under `UECO_DATA_ROOT` are `TSP`, `ATSP`, `CVRP`, `CVRPLIB`, `MIS`, `MCl`, and `MCut`; filenames are listed directly in each task entry. AE/GP supervised training folders are resolved relative to `UECO_TRAIN_DATA_ROOT` using the same task subdirectories. To override the bundled CVRPLIB directory, set:
+## Data and weights
 
-```bash
-export UECO_CVRPLIB_ROOT=/absolute/path/to/CVRPLIB/instances
+- Pretrained weights: [download]()
+- Test data: [download]()
+- Training data: [ML4CO-Bench-101-SL](https://huggingface.co/datasets/ML4CO/ML4CO-Bench-101-SL/tree/main/train_dataset)
+
+The repository layout is:
+
+```text
+weights/{AE,GP,LC}/<task>/
+data/test/<TASK>/
+data/train/<TASK>/<dataset-folder>/*.txt
 ```
 
-## Manual evaluation
+The included training folders contain one compatible `.txt` shard for a direct smoke test. Download the complete training data from ML4CO-Bench-101-SL for full training runs.
 
-Run each task from its own directory. Released weights are stored in the repository-level `weights/` directory. Select the problem size or dataset by editing the configuration block near the top of the entry, as in the original codebase.
+## Evaluation
+
+Run each entry from its task directory. Paths to test data and weights are written directly in each script as paths relative to that directory.
 
 ```bash
 cd LC/atsp
-python test_atsp_uni.py
+python test_atsp.py
 ```
-
-Other examples:
 
 ```bash
 cd AE/tsp
-python test_tsp_uni.py
+python test_tsp.py
 
 cd GP/mis
-python test_mis_uni.py
+python test_mis.py
 
 cd LC/cvrp
-python test_cvrp_uni.py
+python test_cvrp.py
 ```
 
-The historical `_uni.py` suffix is retained only on manual entry filenames for command compatibility; implementation modules, classes, and released weight names use `UECO`.
+Change `TEST_DATA`, `NODES_NUM`, or the corresponding configuration block in a task script to select another released setting.
 
-TSP and ATSP retain the original ML4CO-Kit 2-opt paths used by their host pipelines. The later custom/compiled ATSP "new 2-opt" extension is intentionally not included.
+## Training
 
-## Manual training
-
-Training follows the same per-task workflow and intentionally has no integrated reproduction launcher:
+Training is task-local and uses the same manual entry-point style:
 
 ```bash
 cd GP/tsp
-python train_tsp_uni.py
+python train_tsp.py
 ```
 
-Edit the task configuration block to choose the dataset, GPU devices, batch size, and epoch count. AE/GP retain the original ML4CO-Kit Weights & Biases logger and write new checkpoints beneath `train_ckpts/`; authenticate with `wandb login` before training. Historical WandB runs and log directories are not included. LC retains the original task-local logger/checkpoint behavior of its host construction pipeline.
+Edit the configuration block in the script to select the dataset, GPU, batch size, and number of epochs.

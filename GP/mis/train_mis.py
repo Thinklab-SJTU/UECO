@@ -14,23 +14,21 @@ from model import UECOModel, UECOEncoder, MISDecoder
 ##########################
 
 TRAIN_TYPE = ("MIS", "RB", "200-300")
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(repo_folder, "data"))
-TRAIN_DATA_ROOT = os.environ.get("UECO_TRAIN_DATA_ROOT", os.path.join(repo_folder, "train_data"))
 
 TRAIN_FOLDER_DICT = {
-    ("MIS", "RB", "200-300"): os.path.join(TRAIN_DATA_ROOT, "MIS", "MIS_RB-SMALL_KaMIS-10s"),
-    ("MIS", "RB", "800-1200"): os.path.join(TRAIN_DATA_ROOT, "MIS", "MIS_RB-LARGE_KaMIS-60s"),
-    ("MIS", "ER", "700-800"): os.path.join(TRAIN_DATA_ROOT, "MIS", "MIS_ER-700-800-0.15_KaMIS-20s"),
-    ("MIS", "SATLIB", None): os.path.join(TRAIN_DATA_ROOT, "MIS", "MIS_SATLIB_KAMIS-60s")
+    ("MIS", "RB", "200-300"): "../../data/train/MIS/MIS_RB-SMALL_KaMIS-10s",
+    ("MIS", "RB", "800-1200"): "../../data/train/MIS/MIS_RB-LARGE_KaMIS-60s",
+    ("MIS", "ER", "700-800"): "../../data/train/MIS/MIS_ER-700-800-0.15_KaMIS-20s",
+    ("MIS", "SATLIB", None): "../../data/train/MIS/MIS_SATLIB_KAMIS-60s"
 }
 
 VAL_PATH_DICT = {
-    ("MIS", "RB", "200-300"): os.path.join(DATA_ROOT, "MIS", "mis_rb-small_kamis_10s_20.09.txt"),
-    ("MIS", "RB", "800-1200"): os.path.join(DATA_ROOT, "MIS", "mis_rb-large_kamis-60s_43.004.txt"),
-    ("MIS", "RB", "2000-3000"): os.path.join(DATA_ROOT, "MIS", "mis_rb-giant_kamis-60s_49.260.txt"),
-    ("MIS", "ER", "700-800"): os.path.join(DATA_ROOT, "MIS", "mis_er-700-800_kamis-60s_44.96875.txt"),
-    ("MIS", "ER", "1400-1600"): os.path.join(DATA_ROOT, "MIS", "mis_er-1400-1600_kamis-60s_50.9375.txt"),
-    ("MIS", "SATLIB", None): os.path.join(DATA_ROOT, "MIS", "mis_satlib_kamis_10s_425.954.txt")
+    ("MIS", "RB", "200-300"): "../../data/test/MIS/mis_rb-small_kamis_10s_20.09.txt",
+    ("MIS", "RB", "800-1200"): "../../data/test/MIS/mis_rb-large_kamis-60s_43.004.txt",
+    ("MIS", "RB", "2000-3000"): "../../data/test/MIS/mis_rb-giant_kamis-60s_49.260.txt",
+    ("MIS", "ER", "700-800"): "../../data/test/MIS/mis_er-700-800_kamis-60s_44.96875.txt",
+    ("MIS", "ER", "1400-1600"): "../../data/test/MIS/mis_er-1400-1600_kamis-60s_50.9375.txt",
+    ("MIS", "SATLIB", None): "../../data/test/MIS/mis_satlib_kamis_10s_425.954.txt"
 }
 
 encoder_params = {

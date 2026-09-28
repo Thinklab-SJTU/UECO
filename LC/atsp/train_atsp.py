@@ -35,12 +35,11 @@ SAMPLES_PER_EPOCH = 10000
 
 TRAIN_TYPE = ("ATSP", "uniform", NODES_NUM)
 
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(REPO_DIR, "data"))
 VAL_PATH_DICT = {
-    ("ATSP", "uniform", 50): os.path.join(DATA_ROOT, "ATSP", "atsp50_uniform_lkh_1000_1.55448.txt"),
-    ("ATSP", "uniform", 100): os.path.join(DATA_ROOT, "ATSP", "atsp100_uniform_lkh_1000_1.56604.txt"),
-    ("ATSP", "uniform", 200): os.path.join(DATA_ROOT, "ATSP", "atsp200_uniform_lkh_1000_1.56472.txt"),
-    ("ATSP", "uniform", 500): os.path.join(DATA_ROOT, "ATSP", "atsp500_uniform_lkh_1000_1.57345.txt"),
+    ("ATSP", "uniform", 50): "../../data/test/ATSP/atsp50_uniform_lkh_1000_1.55448.txt",
+    ("ATSP", "uniform", 100): "../../data/test/ATSP/atsp100_uniform_lkh_1000_1.56604.txt",
+    ("ATSP", "uniform", 200): "../../data/test/ATSP/atsp200_uniform_lkh_1000_1.56472.txt",
+    ("ATSP", "uniform", 500): "../../data/test/ATSP/atsp500_uniform_lkh_1000_1.57345.txt",
 }
 
 env_params = {

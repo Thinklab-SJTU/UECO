@@ -32,17 +32,16 @@ from CVRPTester_UECO import CVRPTester as Tester
 ##########################################################################################
 # parameters
 TEST_DATA = ("CVRP", "uniform", 50)
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(REPO_DIR, "data"))
-TEST_DIR = os.environ.get("UECO_CVRPLIB_ROOT", os.path.join(DATA_ROOT, "CVRPLIB"))
+TEST_DIR = "../../data/test/CVRPLIB"
 # NODES_NUM = TEST_DATA[-1]
 NUM_AUG = 16
 USE_LS = True
 
 WEIGHT_DICT = {
-    ("CVRP", "uniform", 50): os.path.join(REPO_DIR, "weights", "CVRP50_LC_UECO.pt"),
-    ("CVRP", "uniform", 100): os.path.join(REPO_DIR, "weights", "CVRP100_LC_UECO.pt"),
-    ("CVRP", "uniform", 200): os.path.join(REPO_DIR, "weights", "CVRP200_LC_UECO.pt"),
-    ("CVRP", "uniform", 500): os.path.join(REPO_DIR, "weights", "CVRP500_LC_UECO.pt"),
+    ("CVRP", "uniform", 50): "../../weights/LC/cvrp/CVRP50_LC_UECO.pt",
+    ("CVRP", "uniform", 100): "../../weights/LC/cvrp/CVRP100_LC_UECO.pt",
+    ("CVRP", "uniform", 200): "../../weights/LC/cvrp/CVRP200_LC_UECO.pt",
+    ("CVRP", "uniform", 500): "../../weights/LC/cvrp/CVRP500_LC_UECO.pt",
 }
 
 """ Results   
@@ -99,8 +98,7 @@ def main():
 
     if not os.path.isdir(TEST_DIR):
         raise FileNotFoundError(
-            f"CVRPLIB directory not found: {TEST_DIR}. "
-            "Set UECO_CVRPLIB_ROOT to the directory containing CVRPLIB instances."
+            f"CVRPLIB directory not found: {TEST_DIR}."
         )
 
     test_path_list = []

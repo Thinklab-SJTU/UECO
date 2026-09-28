@@ -1,4 +1,15 @@
+##########################################################################################
+# Machine Environment Config
+
 import os
+
+USE_CUDA = True
+CUDA_DEVICE_NUM = int(os.environ.get("UECO_CUDA_DEVICE", "0"))
+
+
+##########################################################################################
+# Path Config
+
 import sys
 import torch
 import numpy as np
@@ -10,37 +21,36 @@ os.chdir(TASK_DIR)
 sys.path.insert(0, os.path.dirname(TASK_DIR))
 sys.path.insert(0, REPO_DIR)
 
-from TSPTester_UECO import TSPTester as Tester
 
 ##########################################################################################
-# Machine Environment Config
+# import
 
-USE_CUDA = True
-CUDA_DEVICE_NUM = int(os.environ.get("UECO_CUDA_DEVICE", "0"))
+from CVRPTester_UECO import CVRPTester as Tester
+
 
 ##########################################################################################
 # parameters
-
-TEST_DATA = ("TSP", "uniform", 50)
+TEST_DATA = ("CVRP", "uniform", 500)
 NODES_NUM = TEST_DATA[-1]
 NUM_AUG = 1
-USE_TWO_OPT = False
+USE_LS = False
 
-WEIGHT_DICT = { 
-    ("TSP", "uniform", 50): os.path.join(REPO_DIR, "weights", "TSP50_LC_UECO.pt"),
-    ("TSP", "uniform", 100): os.path.join(REPO_DIR, "weights", "TSP100_LC_UECO.pt"),
-    ("TSP", "uniform", 500): os.path.join(REPO_DIR, "weights", "TSP500_LC_UECO.pt"),
+WEIGHT_DICT = {
+    ("CVRP", "uniform", 50): "../../weights/LC/cvrp/CVRP50_LC_UECO.pt",
+    ("CVRP", "uniform", 100): "../../weights/LC/cvrp/CVRP100_LC_UECO.pt",
+    ("CVRP", "uniform", 200): "../../weights/LC/cvrp/CVRP200_LC_UECO.pt",
+    ("CVRP", "uniform", 500): "../../weights/LC/cvrp/CVRP500_LC_UECO.pt",
 }
 
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(REPO_DIR, "data"))
 TEST_PATH_DICT = {
-    ("TSP", "uniform", 50): os.path.join(DATA_ROOT, "TSP", "tsp50_concorde_5.68759.txt"),
-    ("TSP", "uniform", 100): os.path.join(DATA_ROOT, "TSP", "tsp100_concorde_7.75585.txt"),
-    ("TSP", "uniform", 500): os.path.join(DATA_ROOT, "TSP", "tsp500_concorde_16.54581.txt"),
+    ("CVRP", "uniform", 50): "../../data/test/CVRP/cvrp50_hgs-1s_10.366.txt",
+    ("CVRP", "uniform", 100): "../../data/test/CVRP/cvrp100_hgs-20s_15.563.txt",
+    ("CVRP", "uniform", 200): "../../data/test/CVRP/cvrp200_hgs-60s_19.630.txt",
+    ("CVRP", "uniform", 500): "../../data/test/CVRP/cvrp500_hgs-300s_37.154.txt",
 }
 
 env_params = {
-    "test_type": TEST_DATA,
+    "task": TEST_DATA[0],
     "pos_embedding_dim": 256,
     "node_cnt": TEST_DATA[2],
     "pomo_size": NODES_NUM,
@@ -65,8 +75,10 @@ tester_params = {
     "test_file": TEST_PATH_DICT[TEST_DATA],
     "augmentation_enable": True,
     "aug_factor": NUM_AUG,
-    "use_2opt": USE_TWO_OPT,
-    "num_instances": int(os.environ.get("UECO_TEST_NUM_INSTANCES", "1280")),
+    "use_ls": USE_LS,
+    "num_instances": int(os.environ.get(
+        "UECO_TEST_NUM_INSTANCES", "10000" if NODES_NUM <= 100 else "100"
+    )),
 }
 
 def setup_seed(seed):
@@ -76,10 +88,11 @@ def setup_seed(seed):
     random.seed(seed)
     torch.backends.cudnn.deterministic = True
 
+
 ##########################################################################################
 # main
 
-def main():    
+def main():
     setup_seed(1234)
 
     _print_config()
@@ -94,10 +107,10 @@ def main():
 def _print_config():
     print("[Test Config] Dataset:", TEST_DATA)
     print("[Test Config] N_Aug:", NUM_AUG)
-    print("[Test Config] 2-OPT:", USE_TWO_OPT)
+    print("[Test Config] Local Search:", USE_LS)
     print("[Test Config] Weight:", WEIGHT_DICT[TEST_DATA])
 
-
 ##########################################################################################
+
 if __name__ == "__main__":
     main()

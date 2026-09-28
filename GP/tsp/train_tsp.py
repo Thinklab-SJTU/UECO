@@ -15,24 +15,22 @@ from model import UECOModel, UECOEncoder, TSPDecoder
 
 TRAIN_TYPE = ("TSP", "uniform", 50)
 SPARSE_TYPE = (False, -1)
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(repo_folder, "data"))
-TRAIN_DATA_ROOT = os.environ.get("UECO_TRAIN_DATA_ROOT", os.path.join(repo_folder, "train_data"))
 
 TRAIN_FOLDER_DICT = {
-    ("TSP", "uniform", 50): os.path.join(TRAIN_DATA_ROOT, "TSP", "TSP50_Uniform_Concorde"),
-    ("TSP", "uniform", 100): os.path.join(TRAIN_DATA_ROOT, "TSP", "TSP100_Uniform_Concorde"),
-    ("TSP", "uniform", 500): os.path.join(TRAIN_DATA_ROOT, "TSP", "TSP500_Uniform_Concorde"),
-    ("TSP", "uniform", 1000): os.path.join(TRAIN_DATA_ROOT, "TSP", "TSP1000_Uniform_LKH-1000"),
-    ("TSP", "uniform", 10000): os.path.join(TRAIN_DATA_ROOT, "TSP", "TSP10000_Uniform_ALKH-1000")
+    ("TSP", "uniform", 50): "../../data/train/TSP/TSP50_Uniform_Concorde",
+    ("TSP", "uniform", 100): "../../data/train/TSP/TSP100_Uniform_Concorde",
+    ("TSP", "uniform", 500): "../../data/train/TSP/TSP500_Uniform_Concorde",
+    ("TSP", "uniform", 1000): "../../data/train/TSP/TSP1000_Uniform_LKH-1000",
+    ("TSP", "uniform", 10000): "../../data/train/TSP/TSP10000_Uniform_ALKH-1000"
 }
 
 VAL_PATH_DICT = {
-    ("TSP", "uniform", 50): os.path.join(DATA_ROOT, "TSP", "tsp50_concorde_5.68759.txt"),
-    ("TSP", "uniform", 100): os.path.join(DATA_ROOT, "TSP", "tsp100_concorde_7.75585.txt"),
-    ("TSP", "uniform", 500): os.path.join(DATA_ROOT, "TSP", "tsp500_concorde_16.54581.txt"),
-    ("TSP", "uniform", 1000): os.path.join(DATA_ROOT, "TSP", "tsp1000_concorde_23.11812.txt"),
-    ("TSP", "uniform", 10000): os.path.join(DATA_ROOT, "TSP", "tsp10000_lkh_500_71.75483.txt"),
-    ("TSP", "uniform", 100000): os.path.join(DATA_ROOT, "TSP", "tsp100000_lkh_1_226.26067.txt")
+    ("TSP", "uniform", 50): "../../data/test/TSP/tsp50_concorde_5.68759.txt",
+    ("TSP", "uniform", 100): "../../data/test/TSP/tsp100_concorde_7.75585.txt",
+    ("TSP", "uniform", 500): "../../data/test/TSP/tsp500_concorde_16.54581.txt",
+    ("TSP", "uniform", 1000): "../../data/test/TSP/tsp1000_concorde_23.11812.txt",
+    ("TSP", "uniform", 10000): "../../data/test/TSP/tsp10000_lkh_500_71.75483.txt",
+    ("TSP", "uniform", 100000): "../../data/test/TSP/tsp100000_lkh_1_226.26067.txt"
 }
 
 VAL_SAMPLES_DICT = {

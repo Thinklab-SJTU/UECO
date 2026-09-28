@@ -5,8 +5,8 @@ root_folder = os.path.dirname(task_folder)
 repo_folder = os.path.dirname(root_folder)
 sys.path.append(root_folder)
 from env import GNN4COEnv
-from model import UECOModel, UECOEncoder, MCutDecoder
-from solver import GNN4COMCutSolver
+from model import UECOModel, UECOEncoder, MISDecoder
+from solver import GNN4COMISSolver
 from tabulate import tabulate
 
 ###############################
@@ -14,31 +14,35 @@ from tabulate import tabulate
 ###############################
 
 # Problem Settings
-TASK = "MCut"
+TASK = "MIS"
 NODES_NUM = "200-300"
-TEST_TYPE = (TASK, "BA", NODES_NUM)
+TEST_TYPE = (TASK, "RB", NODES_NUM)
 
 # Solving Settings
-DEVICE = "cuda"
+DEVICE = "cpu"
 SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
 
 # Model Settings
 encoder_params = {
     "embedding_dim": 256,
-    "num_gcn_layers": 3,
-    "num_att_layers": 4,
+    "num_gcn_layers": 1 if TEST_TYPE[1] == "ER" else 3,
+    "num_att_layers": 5 if TEST_TYPE[1] == "ER" else 4,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,
     "ms_hidden_dim": 16,
-    "dual": False
+    "dual": TEST_TYPE[1] == "ER",
+    "legacy_sparse": TEST_TYPE[1] == "ER",
 }
 
 # Local Search Settings
 RLSA_SETTINGS_DICT = {
-    ("MCut", "BA", "200-300"): (1, 20, 1000, 1000),
-    ("MCut", "BA", "800-1200"): (1, 50, 1000, 1000),
-    ("MCut", "BA", "2000-3000"): (1, 100, 1000, 1000)
+    ("MIS", "RB", "200-300"): (0.01, 5, 1000, 500, 1.02, 0.3),
+    ("MIS", "RB", "800-1200"): (0.01, 5, 1000, 1000, 1.02, 0.3),
+    ("MIS", "RB", "2000-3000"): (0.01, 5, 1000, 1000, 1.02, 0.3),
+    ("MIS", "ER", "700-800"): (0.2, 10, 1000, 1000, 1.001, 0.3),
+    ("MIS", "ER", "1400-1600"): (0.2, 10, 1000, 1000, 1.001, 0.3),
+    ("MIS", "SATLIB", None): (0.01, 2, 1000, 1000, 1.02, 0.3),
 }
 
 ###############################
@@ -61,28 +65,30 @@ def print_results(obj: float, ref_obj: float, gap: float, gap_std: float, avg_ti
     print(tabulate(table, headers=headers, floatfmt=".5f"))
 
 # Test File & Pretrained Weights
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(os.path.dirname(root_folder), "data"))
 TEST_FILE_DICT = {
-    ("MCut", "BA", "200-300"): os.path.join(DATA_ROOT, "MCut", "mcut_ba-small_gurobi_60s_727.844.txt"),
-    ("MCut", "BA", "800-1200"): os.path.join(DATA_ROOT, "MCut", "mcut_ba-large_gurobi_300s_2936.886.txt"),
+    ("MIS", "RB", "200-300"): "../../data/test/MIS/mis_rb-small_kamis_10s_20.09.txt",
+    ("MIS", "RB", "800-1200"): "../../data/test/MIS/mis_rb-large_kamis-60s_43.004.txt",
+    ("MIS", "ER", "700-800"): "../../data/test/MIS/mis_er-700-800_kamis-60s_44.96875.txt",
+    ("MIS", "SATLIB", None): "../../data/test/MIS/mis_satlib_kamis_10s_425.954.txt",
 }
 
 WEIGHT_PATH_DICT = {
-    ("MCut", "BA", "200-300"): os.path.join(repo_folder, "weights", "MCut_BA_200-300_GP_UECO.pt"),
-    ("MCut", "BA", "800-1200"): os.path.join(repo_folder, "weights", "MCut_BA_800-1200_GP_UECO.pt"),
+    ("MIS", "RB", "200-300"): "../../weights/GP/mis/MIS_RB_200-300_GP_UECO.pt",
+    ("MIS", "RB", "800-1200"): "../../weights/GP/mis/MIS_RB_800-1200_GP_UECO.pt",
+    ("MIS", "ER", "700-800"): "../../weights/GP/mis/MIS_ER_700-800_GP_UECO.pt",
+    ("MIS", "SATLIB", None): "../../weights/GP/mis/MIS_SATLIB_GP_UECO.pt",
 }
 
 ################################
 #             Main             #
 ################################
 
-# Main
 if __name__ == "__main__":
     rlsa_settings = RLSA_SETTINGS_DICT[TEST_TYPE]
-    solver = GNN4COMCutSolver(
+    solver = GNN4COMISSolver(
         model=UECOModel(
             env=GNN4COEnv(
-                task="MCut", mode="solve", sparse_factor=1, device=DEVICE,
+                task="MIS", mode="solve", sparse_factor=1, device=DEVICE,
             ),
             encoder=UECOEncoder(
                 task=TASK,
@@ -90,17 +96,20 @@ if __name__ == "__main__":
                 sparse=True,
                 **encoder_params
             ),
-            decoder=MCutDecoder(
+            decoder=MISDecoder(
                 decoding_type=SOLVING_SETTINGS[0], 
                 local_search_type=SOLVING_SETTINGS[1],
                 rlsa_tau=rlsa_settings[0],
                 rlsa_d=rlsa_settings[1],
                 rlsa_k=rlsa_settings[2],
-                rlsa_t=rlsa_settings[3]
+                rlsa_t=rlsa_settings[3],
+                rlsa_beta=rlsa_settings[4],
+                rlsa_alpha=rlsa_settings[5],
+                rlsa_device="cuda"
             ),
             weight_path=check_and_ckpt_to_pt(
                 WEIGHT_PATH_DICT[TEST_TYPE],
-                save_path=os.path.join(repo_folder, "weights", f"tmp_{TEST_TYPE}_GP_UECO.pt")
+                save_path=f"../../weights/GP/mis/tmp_{TEST_TYPE}_GP_UECO.pt"
             )
         )
     )

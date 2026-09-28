@@ -10,39 +10,51 @@ from model import UECOModel, UECOEncoder, COExpanderDecoder
 from env import COExpanderEnv
 
 
-TRAIN_TYPE = ("MCut", "BA", "800-1200")
-DATA_ROOT = os.environ.get("UECO_DATA_ROOT", os.path.join(repo_folder, "data"))
-TRAIN_DATA_ROOT = os.environ.get("UECO_TRAIN_DATA_ROOT", os.path.join(repo_folder, "train_data"))
+TRAIN_TYPE = ("TSP", "uniform", 500)
+SPARSE_TYPE = (False, -1)
 
 TRAIN_FOLDER_DICT = {
-    ("MCut", "BA", "200-300"): os.path.join(TRAIN_DATA_ROOT, "MCut", "MCut_BA-SMALL_Gurobi-60s"),
-    ("MCut", "BA", "800-1200"): os.path.join(TRAIN_DATA_ROOT, "MCut", "MCut_BA-LARGE_Gurobi-300s"),
+    ("TSP", "uniform", 50): "../../data/train/TSP/TSP50_Uniform_Concorde",
+    ("TSP", "uniform", 100): "../../data/train/TSP/TSP100_Uniform_Concorde",
+    ("TSP", "uniform", 500): "../../data/train/TSP/TSP500_Uniform_Concorde",
+    ("TSP", "uniform", 1000): "../../data/train/TSP/TSP1000_Uniform_LKH-1000",
+    ("TSP", "uniform", 10000): "../../data/train/TSP/TSP10000_Uniform_ALKH-1000"
 }
 
 VAL_PATH_DICT = {
-    ("MCut", "BA", "200-300"): os.path.join(DATA_ROOT, "MCut", "mcut_ba-small_gurobi_60s_727.844.txt"),
-    ("MCut", "BA", "800-1200"): os.path.join(DATA_ROOT, "MCut", "mcut_ba-large_gurobi_300s_2936.886.txt"),
+    ("TSP", "uniform", 50): "../../data/test/TSP/tsp50_concorde_5.68759.txt",
+    ("TSP", "uniform", 100): "../../data/test/TSP/tsp100_concorde_7.75585.txt",
+    ("TSP", "uniform", 500): "../../data/test/TSP/tsp500_concorde_16.54581.txt",
+    ("TSP", "uniform", 1000): "../../data/test/TSP/tsp1000_concorde_23.11812.txt",
+    ("TSP", "uniform", 10000): "../../data/test/TSP/tsp10000_lkh_500_71.75483.txt",
+    ("TSP", "uniform", 100000): "../../data/test/TSP/tsp100000_lkh_1_226.26067.txt"
+}
+
+VAL_SAMPLES_DICT = {
+    50: 1280,
+    100: 1280,
+    500: 128,
+    1000: 128,
+    10000: 16
+}
+
+BATCH_SIZE_DICT = {
+    50: 20,
+    100: 10,
+    500: 1,
+    1000: 2,
+    10000: 1
 }
 
 encoder_params = {
     "embedding_dim": 256,
     "num_gcn_layers": 3,
-    "num_att_layers": 4,
+    "num_att_layers": 3,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,
     "ms_hidden_dim": 16,
-    "dual": False
-}
-
-VAL_SAMPLES_DICT = {
-    "200-300": 500,
-    "800-1200": 500
-}
-
-BATCH_SIZE_DICT = {
-    "200-300": 8,
-    "800-1200": 4
+    "dual": True
 }
 
 if __name__ == "__main__":
@@ -50,40 +62,39 @@ if __name__ == "__main__":
     formatted_time = time.strftime("%Y%m%d%H%M", time.localtime(timestamp))[-8:]
     model = UECOModel(
         env=COExpanderEnv(
-            task="MCut",
+            task="TSP",
             mode="train",
-            train_data_size=128000,
+            train_data_size=20000,
             val_data_size=VAL_SAMPLES_DICT[TRAIN_TYPE[2]],
             train_batch_size=BATCH_SIZE_DICT[TRAIN_TYPE[2]],
             val_batch_size=1,
             num_workers=4,
-            sparse_factor=1,
+            sparse_factor=SPARSE_TYPE[1],
             device="cuda",
             train_folder=TRAIN_FOLDER_DICT[TRAIN_TYPE],
             val_path=VAL_PATH_DICT[TRAIN_TYPE],
             store_data=False # set False if your server's memory is not large enough.
         ),
         encoder=UECOEncoder(
-            task="MCut",
+            task="TSP",
             paradigm="AE",
-            sparse=True,
-            sparse_factor=1,
+            sparse=SPARSE_TYPE[0],
+            sparse_factor=SPARSE_TYPE[1],
             **encoder_params
         ),
         decoder=COExpanderDecoder(),
-        learning_rate=5e-5, # 2e-4 for 200-300
+        learning_rate=2e-4,
         weight_decay=5e-5,
         inference_steps=1,
         determinate_steps=1
     )
 
-    run_name = f"{TRAIN_TYPE[0]}_{TRAIN_TYPE[1]}_{TRAIN_TYPE[2]}_AE_UECO_{formatted_time}"
+    run_name = f"{TRAIN_TYPE[0]}{TRAIN_TYPE[2]}_AE_UECO_{formatted_time}"
     trainer = Trainer(
-        model=model, devices=[0,1,2], max_epochs=50,
+        model=model, devices=[0], max_epochs=50,
         wandb_logger_name=run_name,
         ckpt_monitor="val/costs_avg",
         ckpt_filename="epoch={epoch}-obj={val/costs_avg:.5f}",
-        save_top_k=5,
-        mode="max"
+        save_top_k=5
     )
     trainer.model_train()
