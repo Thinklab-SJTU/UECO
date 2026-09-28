@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+result/
+train_ckpts/
+train_logs/
+log/
+wandb/
+weights/
+data/
