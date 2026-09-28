@@ -9,3 +9,7 @@ log/
 wandb/
 weights/
 data/
+
+data.tar.gz
+weights.tar.gz
+test_data.tar.gz
