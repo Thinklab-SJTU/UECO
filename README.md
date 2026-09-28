@@ -14,8 +14,6 @@ UECO decouples **representation learning** from **decision making**. It provides
 
 ![UECO in the NCO landscape](figures/fig1.png)
 
-*Figure 1. UECO places LC, GP, and AE pipelines in a shared architectural space while retaining their task-specific objectives and decision mechanisms.*
-
 ## 🧩 Iterative Edge-Node Reasoning
 
 UECO jointly maintains node and edge representations through two complementary components. A **global node-centric attention module** captures long-range dependencies, while a lightweight **local structure-aware module** aggregates neighborhood information and evolves edge states. Rather than injecting fixed edge features once, UECO interleaves these components layer by layer: locally refined edge embeddings dynamically modulate the next global attention scores, and the updated node semantics in turn guide subsequent edge evolution.
@@ -26,7 +24,6 @@ Modality-specific embedders support node features, edge features, or both. For d
   <img src="figures/fig2.png" width="76%" alt="UECO architecture">
 </p>
 
-<p align="center"><em>Figure 2. UECO alternates local edge evolution with global mixed attention for progressive local-global reasoning.</em></p>
 
 ## ⚙️ Installation
 
@@ -51,8 +48,8 @@ pip install matplotlib tqdm scikit-learn
 
 ## 📦 Data and weights
 
-- Pretrained weights: [download]()
-- Test data: [download]()
+- Pretrained weights: [download](https://drive.google.com/file/d/1j3iD6Yv0pG97RsOgnU-jdiFhPKaNipUW/view?usp=sharing)
+- Test data: [download](https://drive.google.com/file/d/1tLQBUBAMJLIcW3KtS5gSXzuuKmdG9VOD/view?usp=share_link)
 - Training data: [ML4CO-Bench-101-SL](https://huggingface.co/datasets/ML4CO/ML4CO-Bench-101-SL/tree/main/train_dataset)
 
 The repository layout is:
