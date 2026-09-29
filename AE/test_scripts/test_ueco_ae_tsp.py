@@ -18,7 +18,7 @@ from tabulate import tabulate
 # Problem Settings
 TASK = "TSP"
 NODES_NUM = 50
-SPARSE_FACTOR = -1 # 50 for TSP-500 and TSP-10K, 100 for TSP-1K
+SPARSE_FACTOR = {50: -1, 100: -1, 500: 50}[NODES_NUM]
 TEST_TYPE = (TASK, "uniform", NODES_NUM)
 
 # Solving Settings

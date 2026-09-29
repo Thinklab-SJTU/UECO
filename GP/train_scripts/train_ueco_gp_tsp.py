@@ -15,7 +15,8 @@ from model import UECOModel, UECOEncoder, TSPDecoder
 ##########################
 
 TRAIN_TYPE = ("TSP", "uniform", 50)
-SPARSE_TYPE = (False, -1)
+SPARSE_FACTOR = {50: -1, 100: -1, 500: 50}[TRAIN_TYPE[2]]
+SPARSE_TYPE = (SPARSE_FACTOR > 0, SPARSE_FACTOR)
 
 TRAIN_FOLDER_DICT = {
     ("TSP", "uniform", 50): "../data/train/TSP/TSP50_Uniform_Concorde",
