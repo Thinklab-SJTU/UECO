@@ -10,18 +10,18 @@ Despite the promise of Neural Combinatorial Optimization (NCO), recent literatur
 
 Neural combinatorial optimization has developed along several successful but largely separated streams. Local Construction (LC), Global Prediction (GP), and Adaptive Expansion (AE) methods are commonly paired with different learning objectives, task families, and neural backbones. This empirical coupling makes architectural choices a confounding factor: moving to a new solving paradigm often requires redesigning the representation model as well, obscuring controlled comparison and limiting transfer across problems.
 
-UECO decouples **representation learning** from **decision making**. It provides a shared, plug-and-play encoder that preserves the long-range relational modeling of attention while explicitly capturing the local topology carried by graph edges. The same backbone can therefore serve autoregressive policies, one-shot heatmap predictors, and iterative generative solvers across node- and edge-oriented, dense and sparse, symmetric and asymmetric CO problems.
+UECO decouples **representation learning** from **decision making**. It provides a **shared, plug-and-play encoder** that preserves the long-range relational modeling of attention while explicitly capturing the local topology carried by graph edges. The same backbone can therefore serve **autoregressive policies**, **one-shot heatmap predictors**, and **iterative generative solvers** across *node- and edge-oriented*, *dense and sparse*, *symmetric and asymmetric* CO problems.
 
 ![UECO in the NCO landscape](figures/fig1.png)
 
 ## 🧩 Iterative Edge-Node Reasoning
 
-UECO jointly maintains node and edge representations through two complementary components. A **global node-centric attention module** captures long-range dependencies, while a lightweight **local structure-aware module** aggregates neighborhood information and evolves edge states. Rather than injecting fixed edge features once, UECO interleaves these components layer by layer: locally refined edge embeddings dynamically modulate the next global attention scores, and the updated node semantics in turn guide subsequent edge evolution.
+UECO jointly maintains node and edge representations through two complementary components. A **global node-centric attention module** captures long-range dependencies, while a lightweight **local structure-aware module** aggregates neighborhood information and evolves edge states. Rather than injecting fixed edge features once, UECO interleaves these components layer by layer: **locally refined edge embeddings dynamically modulate the next global attention scores, and the updated node semantics in turn guide subsequent edge evolution**.
 
 Modality-specific embedders support node features, edge features, or both. For directional and asymmetric instances, dual node channels retain the two endpoint views of each edge before their structural messages are merged. The final representations remain decoder-agnostic and can be consumed by global heatmap prediction, autoregressive next-action selection, or iterative solution generation.
 
 <p align="center">
-  <img src="figures/fig2.png" width="76%" alt="UECO architecture">
+  <img src="figures/fig2.png" width="72%" alt="UECO architecture">
 </p>
 
 
