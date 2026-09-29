@@ -21,7 +21,7 @@ UECO jointly maintains node and edge representations through two complementary c
 Modality-specific embedders support node features, edge features, or both. For directional and asymmetric instances, dual node channels retain the two endpoint views of each edge before their structural messages are merged. The final representations remain decoder-agnostic and can be consumed by global heatmap prediction, autoregressive next-action selection, or iterative solution generation.
 
 <p align="center">
-  <img src="figures/fig2.png" width="72%" alt="UECO architecture">
+  <img src="figures/fig2.png" width="68%" alt="UECO architecture">
 </p>
 
 
