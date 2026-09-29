@@ -104,7 +104,7 @@ class CVRPTester:
         self.tmp_solver.from_data(tours=tours_list, ref=False)
         metrics = self.tmp_solver.evaluate(calculate_gap=True)
         
-        if self.num_instances == 1: # cvrplib
+        if self.num_instances == 1:  # single-instance evaluation
             print("[Test Instance]", self.tester_params["test_file"].split("/")[-1])
             # print(f"[Opt] {metrics[1]}")
             print(f"[Obj] {metrics[0]}")

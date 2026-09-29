@@ -35,8 +35,8 @@ from CVRPTester_UECO import CVRPTester as Tester
 # parameters
 TEST_DATA = ("CVRP", "uniform", 500)
 NODES_NUM = TEST_DATA[-1]
-NUM_AUG = 1
-USE_LS = False
+NUM_AUG = 16
+USE_LS = True
 
 WEIGHT_DICT = {
     ("CVRP", "uniform", 50): "../../weights/LC/cvrp/CVRP50_LC_UECO.pt",

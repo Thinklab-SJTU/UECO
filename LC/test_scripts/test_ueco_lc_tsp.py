@@ -27,7 +27,7 @@ CUDA_DEVICE_NUM = int(os.environ.get("UECO_CUDA_DEVICE", "0"))
 TEST_DATA = ("TSP", "uniform", 50)
 NODES_NUM = TEST_DATA[-1]
 NUM_AUG = 1
-USE_TWO_OPT = False
+USE_TWO_OPT = True
 
 WEIGHT_DICT = { 
     ("TSP", "uniform", 50): "../../weights/LC/tsp/TSP50_LC_UECO.pt",
