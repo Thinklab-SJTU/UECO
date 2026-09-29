@@ -17,12 +17,12 @@ from tabulate import tabulate
 # Problem Settings
 TASK = "TSP"
 NODES_NUM = 50
-SPARSE_FACTOR = 50 # 50 for TSP-500 and TSP-10K, 100 for TSP-1K
+SPARSE_FACTOR = -1 # 50 for TSP-500 and TSP-10K, 100 for TSP-1K
 TEST_TYPE = (TASK, "uniform", NODES_NUM)
 
 # Solving Settings
 DEVICE = "cuda:0"
-INFERENCE_STEP = 5 # Is
+INFERENCE_STEP = 1 # Is
 DETERMINATE_STEP = 3 # Ds
 SAMPLING_NUM = 1 # S
 
