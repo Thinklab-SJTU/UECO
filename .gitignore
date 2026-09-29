@@ -7,8 +7,10 @@ train_ckpts/
 train_logs/
 log/
 wandb/
-weights/
-data/
+weights/*
+!weights/.gitkeep
+data/*
+!data/.gitkeep
 
 data.tar.gz
 weights.tar.gz
