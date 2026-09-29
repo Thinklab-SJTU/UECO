@@ -6,10 +6,13 @@ import numpy as np
 import torch
 
 
-TASK_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_DIR = os.path.dirname(os.path.dirname(TASK_DIR))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARADIGM_DIR = os.path.dirname(SCRIPT_DIR)
+TASK_DIR = os.path.join(PARADIGM_DIR, "atsp")
+REPO_DIR = os.path.dirname(PARADIGM_DIR)
 os.chdir(TASK_DIR)
-sys.path.insert(0, os.path.dirname(TASK_DIR))
+sys.path.insert(0, TASK_DIR)
+sys.path.insert(0, PARADIGM_DIR)
 sys.path.insert(0, REPO_DIR)
 
 from ATSPTester_UECO import ATSPTester as Tester

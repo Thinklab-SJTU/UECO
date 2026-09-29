@@ -3,58 +3,42 @@ import sys
 task_folder = os.path.dirname(os.path.abspath(__file__))
 root_folder = os.path.dirname(task_folder)
 repo_folder = os.path.dirname(root_folder)
+os.chdir(root_folder)
 sys.path.append(root_folder)
 from env import GNN4COEnv
-from model import UECOModel, UECOEncoder, MClDecoder
-from solver import GNN4COMClSolver
+from model import UECOModel, UECOEncoder, TSPDecoder
+from solver import GNN4COTSPSolver
 from tabulate import tabulate
-
 
 ###############################
 #          Settings           #
 ###############################
 
 # Problem Settings
-TASK = "MCl"
-NODES_NUM = "200-300"
-TEST_TYPE = (TASK, "RB", NODES_NUM)
+TASK = "TSP"
+NODES_NUM = 50
+SPARSE_FACTOR = 50
+TEST_TYPE = (TASK, "uniform", NODES_NUM)
 
 # Solving Settings
-DEVICE = "cuda"
-SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
+DEVICE = "cuda:0"
+SOLVING_SETTINGS = ("greedy", "2opt") # Choices: [("greedy", "2opt"), ("greedy", "mcts"), ("random_mcts", None), ("mcts", None)]
+
+# Local Search Settings
+MCTS_TIME_LIMIT = 0.05 # 0.05 for TSP50 and TSP100; 1 for TSP500 and TSP1K; 5 for TSP10K
+MCTS_TYPE_FLAG = 2 # 2 for TSP50 and TSP100; 1 for TSP500, TSP1K and TSP10K, 1 for random_mcts
 
 # Model Settings
 encoder_params = {
     "embedding_dim": 256,
     "num_gcn_layers": 3,
-    "num_att_layers": 4, # 4 for RB-small
+    "num_att_layers": 5,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,
     "ms_hidden_dim": 16,
-    "dual": False
+    "dual": True
 }
-
-# Local Search Settings
-RLSA_SETTINGS_DICT = {
-    ("MCl", "RB", "200-300"): (0.01, 2, 200, 50, 1.02, 0.3),
-    ("MCl", "RB", "800-1200"): (0.01, 2, 200, 200, 1.02, 0.3),
-    ("MCl", "RB", "2000-3000"): (0.01, 2, 1000, 1000, 1.02, 0.3),
-    ("MCl", "TWITTER", None): (0.01, 2, 200, 50, 4.0, 0.3),
-    ("MCl", "COLLAB", None): (0.01, 2, 200, 20, 1.001, 0.3)
-}
-
-# Test File & Pretrained Settings
-TEST_FILE_DICT = {
-    ("MCl", "RB", "200-300"): "../../data/test/MCl/mcl_rb-small_gurobi_19.082.txt",
-    ("MCl", "RB", "800-1200"): "../../data/test/MCl/mcl_rb-large_gurobi-300s_40.182.txt",
-}
-
-WEIGHT_PATH_DICT = {
-    ("MCl", "RB", "200-300"): "../../weights/GP/mcl/MCl_RB_200-300_GP_UECO.pt",
-    ("MCl", "RB", "800-1200"): "../../weights/GP/mcl/MCl_RB_800-1200_GP_UECO.pt",
-}
-
 
 ###############################
 #            Utils            #
@@ -75,38 +59,49 @@ def print_results(obj: float, ref_obj: float, gap: float, gap_std: float, avg_ti
     print("[TEST INFO] Test result:")
     print(tabulate(table, headers=headers, floatfmt=".5f"))
 
-# Main
+# Test File & Pretrained Weights
+TEST_FILE_DICT = {
+    ("TSP", "uniform", 50): "../data/test/TSP/tsp50_concorde_5.68759.txt",
+    ("TSP", "uniform", 100): "../data/test/TSP/tsp100_concorde_7.75585.txt",
+    ("TSP", "uniform", 500): "../data/test/TSP/tsp500_concorde_16.54581.txt",
+}
+
+WEIGHT_PATH_DICT = {
+    50: "../weights/GP/tsp/TSP50_GP_UECO.pt",
+    100: "../weights/GP/tsp/TSP100_GP_UECO.pt",
+    500: "../weights/GP/tsp/TSP500_GP_UECO.pt",
+}
+
+
+################################
+#             Main             #
+################################
+
 if __name__ == "__main__":
-    rlsa_settings = RLSA_SETTINGS_DICT[TEST_TYPE]
-    solver = GNN4COMClSolver(
+    solver = GNN4COTSPSolver(
         model=UECOModel(
             env=GNN4COEnv(
-                task="MCl", mode="solve", sparse_factor=1, device=DEVICE,
+                task=TASK, sparse_factor=SPARSE_FACTOR, device=DEVICE
             ),
             encoder=UECOEncoder(
                 task=TASK,
                 paradigm="GP",
-                sparse=True,
+                sparse=SPARSE_FACTOR>0,
                 **encoder_params
             ),
-            decoder=MClDecoder(
-                decoding_type=SOLVING_SETTINGS[0], 
+            decoder=TSPDecoder(
+                decoding_type=SOLVING_SETTINGS[0],
                 local_search_type=SOLVING_SETTINGS[1],
-                rlsa_tau=rlsa_settings[0],
-                rlsa_d=rlsa_settings[1],
-                rlsa_k=rlsa_settings[2],
-                rlsa_t=rlsa_settings[3],
-                rlsa_beta=rlsa_settings[4],
-                rlsa_alpha=rlsa_settings[5],
-                rlsa_device="cuda"
+                mcts_time_limit=MCTS_TIME_LIMIT,
+                mcts_type_2opt=MCTS_TYPE_FLAG
             ),
             weight_path=check_and_ckpt_to_pt(
-                WEIGHT_PATH_DICT[TEST_TYPE],
-                save_path=f"../../weights/GP/mcl/tmp_{TEST_TYPE}_GP_UECO.pt"
+                WEIGHT_PATH_DICT[NODES_NUM],
+                save_path=f"../weights/GP/tsp/tmp_{TASK}{NODES_NUM}_GP_UECO.pt"
             )
         )
     )
-    print(f"[TEST INFO] Test started on {DEVICE}")
+    print("[TEST INFO] Test started ...")
     print(f"[TEST INFO] Test data: {TEST_TYPE}")
     print(f"[TEST INFO] Test setting: {SOLVING_SETTINGS}")
     solver.from_txt(TEST_FILE_DICT[TEST_TYPE], ref=True, show_time=True)

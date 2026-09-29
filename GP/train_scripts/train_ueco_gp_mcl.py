@@ -4,6 +4,7 @@ import time
 task_folder = os.path.dirname(os.path.abspath(__file__))
 root_folder = os.path.dirname(task_folder)
 repo_folder = os.path.dirname(root_folder)
+os.chdir(root_folder)
 sys.path.insert(0, root_folder)
 from ml4co_kit import Trainer
 from env import GNN4COEnv
@@ -17,14 +18,14 @@ from model import UECOModel, UECOEncoder, MClDecoder
 TRAIN_TYPE = ("MCl", "RB", "200-300")
 
 TRAIN_FOLDER_DICT = {
-    ("MCl", "RB", "200-300"): "../../data/train/MCl/MCl-RB-SMALL_GUROBI-60s",
-    ("MCl", "RB", "800-1200"): "../../data/train/MCl/MCl-RB-LARGE_GUROBI-300s",
+    ("MCl", "RB", "200-300"): "../data/train/MCl/MCl-RB-SMALL_GUROBI-60s",
+    ("MCl", "RB", "800-1200"): "../data/train/MCl/MCl-RB-LARGE_GUROBI-300s",
 }
 
 VAL_PATH_DICT = {
-    ("MCl", "RB", "200-300"): "../../data/test/MCl/mcl_rb-small_gurobi_19.082.txt",
-    ("MCl", "RB", "800-1200"): "../../data/test/MCl/mcl_rb-large_gurobi-300s_40.182.txt",
-    ("MCl", "RB", "2000-3000"): "../../data/test/MCl/mcl_rb-gaint_gurobi-3600s_81.520.txt",
+    ("MCl", "RB", "200-300"): "../data/test/MCl/mcl_rb-small_gurobi_19.082.txt",
+    ("MCl", "RB", "800-1200"): "../data/test/MCl/mcl_rb-large_gurobi-300s_40.182.txt",
+    ("MCl", "RB", "2000-3000"): "../data/test/MCl/mcl_rb-gaint_gurobi-3600s_81.520.txt",
 }
 
 

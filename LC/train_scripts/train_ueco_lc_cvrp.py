@@ -1,13 +1,16 @@
 import os
 import sys
-TASK_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_DIR = os.path.dirname(os.path.dirname(TASK_DIR))
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PARADIGM_DIR = os.path.dirname(SCRIPT_DIR)
+TASK_DIR = os.path.join(PARADIGM_DIR, "cvrp")
+REPO_DIR = os.path.dirname(PARADIGM_DIR)
 os.chdir(TASK_DIR)
-sys.path.insert(0, os.path.dirname(TASK_DIR))
+sys.path.insert(0, TASK_DIR)
+sys.path.insert(0, PARADIGM_DIR)
 sys.path.insert(0, REPO_DIR)
 import logging
 from utils.utils import create_logger, copy_all_src
-from ATSPTrainer_UECO import ATSPTrainer as Trainer
+from CVRPTrainer_UECO import CVRPTrainer as Trainer
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -16,30 +19,31 @@ warnings.filterwarnings("ignore")
 ########################
 
 USE_CUDA = True
-CUDA_DEVICE_NUM = 0
+CUDA_DEVICE_NUM = 4
 
-NODES_NUM = 50
+NODES_NUM = 100
 MAX_EPOCH_DICT = {
-    50: 8000,
-    100: 3000, #12000
+    50: 3000,
+    100: 2000,
     200: 1000,
     500: 500
 }
 BATCH_SIZE_DICT = {
-    50: 100,
-    100: 25,
+    50: 200,
+    100: 50,
     200: 5,
     500: 1
 }
+#Batch_size for RL training: 200 for n=50, 128 for n=100, 16 for n=200, 4 for 500
 SAMPLES_PER_EPOCH = 10000
 
-TRAIN_TYPE = ("ATSP", "uniform", NODES_NUM)
+TRAIN_TYPE = ("CVRP", "uniform", NODES_NUM)
 
 VAL_PATH_DICT = {
-    ("ATSP", "uniform", 50): "../../data/test/ATSP/atsp50_uniform_lkh_1000_1.55448.txt",
-    ("ATSP", "uniform", 100): "../../data/test/ATSP/atsp100_uniform_lkh_1000_1.56604.txt",
-    ("ATSP", "uniform", 200): "../../data/test/ATSP/atsp200_uniform_lkh_1000_1.56472.txt",
-    ("ATSP", "uniform", 500): "../../data/test/ATSP/atsp500_uniform_lkh_1000_1.57345.txt",
+    ("CVRP", "uniform", 50): "../../data/test/CVRP/cvrp50_hgs-1s_10.366.txt",
+    ("CVRP", "uniform", 100): "../../data/test/CVRP/cvrp100_hgs-20s_15.563.txt",
+    ("CVRP", "uniform", 200): "../../data/test/CVRP/cvrp200_hgs-60s_19.630.txt",
+    ("CVRP", "uniform", 500): "../../data/test/CVRP/cvrp500_hgs-300s_37.154.txt",
 }
 
 env_params = {
@@ -58,15 +62,16 @@ model_params = {
     "ff_hidden_dim": 512,
     "ms_hidden_dim": 16,
     "eval_type": "argmax",
+    "dual": True
 }
 
 optimizer_params = {
     "optimizer": {
-        "lr": 2e-4 if NODES_NUM <= 100 else 1e-4,
+        "lr": 2e-4 if NODES_NUM <= 50 else 1e-4,
         "weight_decay": 1e-5
     },
     "scheduler": {
-        "milestones": [501, 601], # [2001, 2101] for ATSP-50/100, [501, 601] for ATSP-200
+        "milestones": [1501, 1601], # [2001, 2101] for CVRP-50, [1501, 1601] for CVRP-100, [501, 601] for CVRP-200
         "gamma": 0.1
     }
 }
@@ -77,7 +82,7 @@ trainer_params = {
     "epochs": MAX_EPOCH_DICT[NODES_NUM],
     "train_episodes": SAMPLES_PER_EPOCH,
     "train_batch_size": BATCH_SIZE_DICT[NODES_NUM],
-    "val_interval": 1,
+    "val_interval": 3,
     "val_file": VAL_PATH_DICT[TRAIN_TYPE],
     "val_num": 1280,
     "logging": {

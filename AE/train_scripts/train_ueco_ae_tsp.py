@@ -4,6 +4,7 @@ import time
 task_folder = os.path.dirname(os.path.abspath(__file__))
 root_folder = os.path.dirname(task_folder)
 repo_folder = os.path.dirname(root_folder)
+os.chdir(root_folder)
 sys.path.insert(0, root_folder)
 from ml4co_kit import Trainer
 from model import UECOModel, UECOEncoder, COExpanderDecoder
@@ -14,20 +15,20 @@ TRAIN_TYPE = ("TSP", "uniform", 500)
 SPARSE_TYPE = (False, -1)
 
 TRAIN_FOLDER_DICT = {
-    ("TSP", "uniform", 50): "../../data/train/TSP/TSP50_Uniform_Concorde",
-    ("TSP", "uniform", 100): "../../data/train/TSP/TSP100_Uniform_Concorde",
-    ("TSP", "uniform", 500): "../../data/train/TSP/TSP500_Uniform_Concorde",
-    ("TSP", "uniform", 1000): "../../data/train/TSP/TSP1000_Uniform_LKH-1000",
-    ("TSP", "uniform", 10000): "../../data/train/TSP/TSP10000_Uniform_ALKH-1000"
+    ("TSP", "uniform", 50): "../data/train/TSP/TSP50_Uniform_Concorde",
+    ("TSP", "uniform", 100): "../data/train/TSP/TSP100_Uniform_Concorde",
+    ("TSP", "uniform", 500): "../data/train/TSP/TSP500_Uniform_Concorde",
+    ("TSP", "uniform", 1000): "../data/train/TSP/TSP1000_Uniform_LKH-1000",
+    ("TSP", "uniform", 10000): "../data/train/TSP/TSP10000_Uniform_ALKH-1000"
 }
 
 VAL_PATH_DICT = {
-    ("TSP", "uniform", 50): "../../data/test/TSP/tsp50_concorde_5.68759.txt",
-    ("TSP", "uniform", 100): "../../data/test/TSP/tsp100_concorde_7.75585.txt",
-    ("TSP", "uniform", 500): "../../data/test/TSP/tsp500_concorde_16.54581.txt",
-    ("TSP", "uniform", 1000): "../../data/test/TSP/tsp1000_concorde_23.11812.txt",
-    ("TSP", "uniform", 10000): "../../data/test/TSP/tsp10000_lkh_500_71.75483.txt",
-    ("TSP", "uniform", 100000): "../../data/test/TSP/tsp100000_lkh_1_226.26067.txt"
+    ("TSP", "uniform", 50): "../data/test/TSP/tsp50_concorde_5.68759.txt",
+    ("TSP", "uniform", 100): "../data/test/TSP/tsp100_concorde_7.75585.txt",
+    ("TSP", "uniform", 500): "../data/test/TSP/tsp500_concorde_16.54581.txt",
+    ("TSP", "uniform", 1000): "../data/test/TSP/tsp1000_concorde_23.11812.txt",
+    ("TSP", "uniform", 10000): "../data/test/TSP/tsp10000_lkh_500_71.75483.txt",
+    ("TSP", "uniform", 100000): "../data/test/TSP/tsp100000_lkh_1_226.26067.txt"
 }
 
 VAL_SAMPLES_DICT = {

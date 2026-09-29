@@ -3,6 +3,7 @@ import sys
 task_folder = os.path.dirname(os.path.abspath(__file__))
 root_folder = os.path.dirname(task_folder)
 repo_folder = os.path.dirname(root_folder)
+os.chdir(root_folder)
 sys.path.append(root_folder)
 from env import *
 from model import *
@@ -69,13 +70,13 @@ def print_results(obj: float, ref_obj: float, gap: float, gap_std: float, avg_ti
 
 # Test File & Pretrained Weights
 TEST_FILE_DICT = {
-    ("MCut", "BA", "200-300"): "../../data/test/MCut/mcut_ba-small_gurobi_60s_727.844.txt",
-    ("MCut", "BA", "800-1200"): "../../data/test/MCut/mcut_ba-large_gurobi_300s_2936.886.txt",
+    ("MCut", "BA", "200-300"): "../data/test/MCut/mcut_ba-small_gurobi_60s_727.844.txt",
+    ("MCut", "BA", "800-1200"): "../data/test/MCut/mcut_ba-large_gurobi_300s_2936.886.txt",
 }
 
 WEIGHT_PATH_DICT = {
-    ("MCut", "BA", "200-300"): "../../weights/AE/mcut/MCut_BA_200-300_AE_UECO.pt",
-    ("MCut", "BA", "800-1200"): "../../weights/AE/mcut/MCut_BA_800-1200_AE_UECO.pt",
+    ("MCut", "BA", "200-300"): "../weights/AE/mcut/MCut_BA_200-300_AE_UECO.pt",
+    ("MCut", "BA", "800-1200"): "../weights/AE/mcut/MCut_BA_800-1200_AE_UECO.pt",
 }
 
 ################################
@@ -115,7 +116,7 @@ if __name__ == "__main__":
                 beam_size=BEAM_SIZE,
                 weight_path=check_and_ckpt_to_pt(
                     WEIGHT_PATH_DICT[TEST_TYPE],
-                    save_path=f"../../weights/AE/mcut/tmp_{TEST_TYPE}_AE_UECO.pt"
+                    save_path=f"../weights/AE/mcut/tmp_{TEST_TYPE}_AE_UECO.pt"
                 )
             )
         )

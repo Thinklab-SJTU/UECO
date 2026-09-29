@@ -55,6 +55,8 @@ pip install matplotlib tqdm scikit-learn
 The repository layout is:
 
 ```text
+{AE,GP,LC}/train_scripts/train_ueco_<paradigm>_<task>.py
+{AE,GP,LC}/test_scripts/test_ueco_<paradigm>_<task>.py
 weights/{AE,GP,LC}/<task>/*.pt
 data/test/<TASK>/*.txt
 data/train/<TASK>/<dataset-folder>/*.txt
@@ -64,17 +66,17 @@ Download the complete data and unzip them for full runs.
 
 ## 🧪 Evaluation
 
-Run each entry from its task directory. Paths to test data and weights are written directly in each script as paths relative to that directory. The commands below are independent; run the desired command after entering its paradigm directory.
+Enter a paradigm directory and run the desired task entry directly. Paths to test data and weights are written explicitly in each script.
 
 ### Adaptive Expansion (AE)
 
 ```bash
 cd AE
 
-(cd tsp  && python test_tsp.py)
-(cd mis  && python test_mis.py)
-(cd mcl  && python test_mcl.py)
-(cd mcut && python test_mcut.py)
+python test_scripts/test_ueco_ae_tsp.py
+python test_scripts/test_ueco_ae_mis.py
+python test_scripts/test_ueco_ae_mcl.py
+python test_scripts/test_ueco_ae_mcut.py
 ```
 
 ### Global Prediction (GP)
@@ -82,10 +84,10 @@ cd AE
 ```bash
 cd GP
 
-(cd tsp  && python test_tsp.py)
-(cd mis  && python test_mis.py)
-(cd mcl  && python test_mcl.py)
-(cd mcut && python test_mcut.py)
+python test_scripts/test_ueco_gp_tsp.py
+python test_scripts/test_ueco_gp_mis.py
+python test_scripts/test_ueco_gp_mcl.py
+python test_scripts/test_ueco_gp_mcut.py
 ```
 
 ### Local Construction (LC)
@@ -93,27 +95,26 @@ cd GP
 ```bash
 cd LC
 
-(cd tsp  && python test_tsp.py)
-(cd atsp && python test_atsp.py)
-(cd cvrp && python test_cvrp.py)
-(cd cvrp && python test_cvrplib.py)
+python test_scripts/test_ueco_lc_tsp.py
+python test_scripts/test_ueco_lc_atsp.py
+python test_scripts/test_ueco_lc_cvrp.py
 ```
 
 Change `TEST_DATA`, `NODES_NUM`, or the corresponding configuration block in a task script to select another released setting.
 
 ## 🏋️ Training
 
-Training is task-local and uses the same manual entry-point style. As above, each command is independent.
+Training uses the same paradigm-local entry-point style. As above, each command is independent.
 
 ### Adaptive Expansion (AE)
 
 ```bash
 cd AE
 
-(cd tsp  && python train_tsp.py)
-(cd mis  && python train_mis.py)
-(cd mcl  && python train_mcl.py)
-(cd mcut && python train_mcut.py)
+python train_scripts/train_ueco_ae_tsp.py
+python train_scripts/train_ueco_ae_mis.py
+python train_scripts/train_ueco_ae_mcl.py
+python train_scripts/train_ueco_ae_mcut.py
 ```
 
 ### Global Prediction (GP)
@@ -121,10 +122,10 @@ cd AE
 ```bash
 cd GP
 
-(cd tsp  && python train_tsp.py)
-(cd mis  && python train_mis.py)
-(cd mcl  && python train_mcl.py)
-(cd mcut && python train_mcut.py)
+python train_scripts/train_ueco_gp_tsp.py
+python train_scripts/train_ueco_gp_mis.py
+python train_scripts/train_ueco_gp_mcl.py
+python train_scripts/train_ueco_gp_mcut.py
 ```
 
 ### Local Construction (LC)
@@ -132,9 +133,9 @@ cd GP
 ```bash
 cd LC
 
-(cd tsp  && python train_tsp.py)
-(cd atsp && python train_atsp.py)
-(cd cvrp && python train_cvrp.py)
+python train_scripts/train_ueco_lc_tsp.py
+python train_scripts/train_ueco_lc_atsp.py
+python train_scripts/train_ueco_lc_cvrp.py
 ```
 
 Edit the configuration block in the script to select the dataset, GPU, batch size, and number of epochs.
