@@ -79,6 +79,8 @@ python test_scripts/test_ueco_ae_mcl.py
 python test_scripts/test_ueco_ae_mcut.py
 ```
 
+The default AE evaluation uses `INFERENCE_STEP = 1`; only `DETERMINATE_STEP` is varied across task settings. To evaluate the generative `GP-SL (Gen)` setting reported in the paper, set `DETERMINATE_STEP = 1` and increase `INFERENCE_STEP` (for example, `INFERENCE_STEP = 5`) in the selected AE test script.
+
 ### Global Prediction (GP)
 
 ```bash

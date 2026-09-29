@@ -44,7 +44,7 @@ RLSA_SETTINGS_DICT = {
 }
 
 # COExpander Settings
-INFERENCE_STEP = 1 # Is
+INFERENCE_STEP = 1 # Is; keep 1 for the default AE setting
 DETERMINATE_STEP = 20 # Ds
 SAMPLING_NUM = 1 # S
 BEAM_SIZE = -1 # Beam Search

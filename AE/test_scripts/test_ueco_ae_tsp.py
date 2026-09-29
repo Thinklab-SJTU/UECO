@@ -23,7 +23,7 @@ TEST_TYPE = (TASK, "uniform", NODES_NUM)
 
 # Solving Settings
 DEVICE = "cuda:0"
-INFERENCE_STEP = 1 # Is
+INFERENCE_STEP = 1 # Is; keep 1 for the default AE setting
 DETERMINATE_STEP = 3 # Ds
 SAMPLING_NUM = 1 # S
 
