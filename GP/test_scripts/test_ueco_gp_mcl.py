@@ -25,10 +25,15 @@ DEVICE = "cuda"
 SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
 
 # Model Settings
+NUM_ATT_LAYERS = {
+    ("MCl", "RB", "200-300"): 4,
+    ("MCl", "RB", "800-1200"): 3,
+}[TEST_TYPE]
+
 encoder_params = {
     "embedding_dim": 256,
     "num_gcn_layers": 3,
-    "num_att_layers": 4, # 4 for RB-small
+    "num_att_layers": NUM_ATT_LAYERS,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,

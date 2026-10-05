@@ -26,15 +26,22 @@ USE_RLSA = False
 
 # COExpander Settings
 INFERENCE_STEP = 1 # Is; keep 1 for the default AE setting
-DETERMINATE_STEP = 50 # Ds
+DETERMINATE_STEP = 20 # Ds; paper setting for MIS
 SAMPLING_NUM = 1 # S
 BEAM_SIZE = -1 # Beam Search
 
 # Model Settings
+NUM_ATT_LAYERS = {
+    ("MIS", "RB", "200-300"): 4,
+    ("MIS", "RB", "800-1200"): 3,
+    ("MIS", "ER", "700-800"): 3,
+    ("MIS", "SATLIB", None): 4,
+}[TEST_TYPE]
+
 encoder_params = {
     "embedding_dim": 256,
     "num_gcn_layers": 3,
-    "num_att_layers": 4,
+    "num_att_layers": NUM_ATT_LAYERS,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,

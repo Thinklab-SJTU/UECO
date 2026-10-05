@@ -24,10 +24,18 @@ DEVICE = "cpu"
 SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
 
 # Model Settings
+NUM_GCN_LAYERS = 1 if TEST_TYPE[1] == "ER" else 3
+NUM_ATT_LAYERS = {
+    ("MIS", "RB", "200-300"): 4,
+    ("MIS", "RB", "800-1200"): 3,
+    ("MIS", "ER", "700-800"): 5,
+    ("MIS", "SATLIB", None): 4,
+}[TEST_TYPE]
+
 encoder_params = {
     "embedding_dim": 256,
-    "num_gcn_layers": 1 if TEST_TYPE[1] == "ER" else 3,
-    "num_att_layers": 5 if TEST_TYPE[1] == "ER" else 4,
+    "num_gcn_layers": NUM_GCN_LAYERS,
+    "num_att_layers": NUM_ATT_LAYERS,
     "num_heads": 16,
     "qkv_dim": 16,
     "ff_hidden_dim": 512,
