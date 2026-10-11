@@ -9,7 +9,7 @@ sys.path.insert(0, TASK_DIR)
 sys.path.insert(0, PARADIGM_DIR)
 sys.path.insert(0, REPO_DIR)
 import logging
-from utils.utils import create_logger, copy_all_src
+from utils.utils import create_logger
 from ATSPTrainer_UECO import ATSPTrainer as Trainer
 import warnings
 warnings.filterwarnings("ignore")
@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore")
 ########################
 
 USE_CUDA = True
-CUDA_DEVICE_NUM = 0
+CUDA_DEVICE_NUM = 1
 
 NODES_NUM = 50
 MAX_EPOCH_DICT = {
@@ -123,7 +123,6 @@ def main():
         optimizer_params=optimizer_params,
         trainer_params=trainer_params
     )
-    copy_all_src(trainer.result_folder)
     trainer.run()
 
 def _print_config():
