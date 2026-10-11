@@ -2,6 +2,8 @@
 
 This is the official implementation of our ****NeurIPS 2026 Oral**** paper "[UECO: A Unified Encoder for Neural Combinatorial Optimization with Iterative Edge-Node Reasoning](https://openreview.net/forum?id=M2lqt23VO7)".
 
+[paper_preview.pdf](paper_preview.pdf) is provided for early readers; please refer to the officially published camera-ready version for the definitive paper.
+
 ## Abstract
 
 Despite the promise of Neural Combinatorial Optimization (NCO), recent literature has increasingly coupled decision paradigms, training objectives, and problem classes with specific backbone architectures, limiting generic model design and fair cross-paradigm evaluation. We propose UECO, a simple yet effective Unified Encoder for Combinatorial Optimization with a structure-aware attention mixture scheme, where a lightweight module defined upon graph-based locality is interleaved with conventional global node-focused attention blocks to dynamically evolve edge representations and inject local topological information into attention scores. Instead of fusing static edge features in a single step, UECO integrates local and global messages in a progressive and problem-agnostic manner. UECO works with Local Construction (LC), Global Prediction (GP), and Adaptive Expansion (AE) paradigms, across node- or edge-oriented problems, symmetric or asymmetric tasks, sparse or dense graphs, and supervised, reinforcement, or generative learning. Experiments show that replacing existing encoders with UECO improves solution quality and generalization across TSP, ATSP, CVRP, ACVRP, MIS, MaxClique, and MaxCut at multiple scales.
