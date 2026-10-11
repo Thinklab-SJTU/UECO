@@ -20,7 +20,7 @@ NODES_NUM = "200-300"
 TEST_TYPE = (TASK, "BA", NODES_NUM)
 
 # Solving Settings
-DEVICE = "cuda"
+DEVICE = "cuda:0"
 SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
 
 # Model Settings
@@ -39,7 +39,6 @@ encoder_params = {
 RLSA_SETTINGS_DICT = {
     ("MCut", "BA", "200-300"): (1, 20, 1000, 1000),
     ("MCut", "BA", "800-1200"): (1, 50, 1000, 1000),
-    ("MCut", "BA", "2000-3000"): (1, 100, 1000, 1000)
 }
 
 ###############################

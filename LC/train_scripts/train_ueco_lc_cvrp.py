@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore")
 ########################
 
 USE_CUDA = True
-CUDA_DEVICE_NUM = 1
+CUDA_DEVICE_NUM = 0
 
 NODES_NUM = 50
 MAX_EPOCH_DICT = {

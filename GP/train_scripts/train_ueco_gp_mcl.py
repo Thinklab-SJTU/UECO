@@ -25,7 +25,6 @@ TRAIN_FOLDER_DICT = {
 VAL_PATH_DICT = {
     ("MCl", "RB", "200-300"): "../data/test/MCl/mcl_rb-small_gurobi_19.082.txt",
     ("MCl", "RB", "800-1200"): "../data/test/MCl/mcl_rb-large_gurobi-300s_40.182.txt",
-    ("MCl", "RB", "2000-3000"): "../data/test/MCl/mcl_rb-gaint_gurobi-3600s_81.520.txt",
 }
 
 
@@ -66,7 +65,7 @@ if __name__ == "__main__":
             train_batch_size=BATCH_SIZE_DICT[TRAIN_TYPE[2]],
             val_batch_size=1,
             sparse_factor=1, 
-            device="cuda",
+            device="cuda:0",
             train_folder=TRAIN_FOLDER_DICT[TRAIN_TYPE],
             val_path=VAL_PATH_DICT[TRAIN_TYPE],
             store_data=False # set False if your server's memory is not large enough.
@@ -85,7 +84,7 @@ if __name__ == "__main__":
 
     run_name = f"{TRAIN_TYPE[0]}_{TRAIN_TYPE[1]}_{TRAIN_TYPE[2]}_GP_UECO_{formatted_time}"
     trainer = Trainer(
-        model=model, devices=[0, 1], max_epochs=50,
+        model=model, devices=[0], max_epochs=50,
         wandb_logger_name=run_name,
         ckpt_monitor="val/costs_avg",
         ckpt_filename="epoch={epoch}-obj={val/costs_avg:.5f}",

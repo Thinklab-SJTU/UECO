@@ -63,7 +63,7 @@ if __name__ == "__main__":
             train_batch_size=BATCH_SIZE_DICT[TRAIN_TYPE[2]],
             val_batch_size=1,
             sparse_factor=1, 
-            device="cuda",
+            device="cuda:0",
             train_folder=TRAIN_FOLDER_DICT[TRAIN_TYPE],
             val_path=VAL_PATH_DICT[TRAIN_TYPE],
             store_data=False # set False if your server's memory is not large enough.

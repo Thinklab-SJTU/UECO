@@ -17,7 +17,7 @@ from tabulate import tabulate
 
 # Problem Settings
 TASK = "MCl"
-NODES_NUM = "200-300" #"2000-3000"
+NODES_NUM = "200-300"
 TEST_TYPE = (TASK, "RB", NODES_NUM)
 
 # Solving Settings
@@ -51,9 +51,6 @@ encoder_params = {
 RLSA_SETTINGS_DICT = {
     ("MCl", "RB", "200-300"): (0.01, 2, 200, 50, 1.02, 0.3),
     ("MCl", "RB", "800-1200"): (0.01, 2, 200, 200, 1.02, 0.3),
-    ("MCl", "RB", "2000-3000"): (0.01, 2, 1000, 1000, 1.02, 0.3),
-    ("MCl", "TWITTER", None): (0.01, 2, 200, 50, 4.0, 0.3),
-    ("MCl", "COLLAB", None): (0.01, 2, 200, 20, 1.001, 0.3)
 }
 
 # Test File & Pretrained Settings
@@ -93,7 +90,7 @@ if __name__ == "__main__":
     solver = COExpanderMClSolver(
         model=UECOModel(
             env=COExpanderEnv(
-                task="MCl", mode="solve", sparse_factor=1, device="cuda",
+                task="MCl", mode="solve", sparse_factor=1, device=DEVICE,
             ),
             encoder=UECOEncoder(
                 task="MCl",

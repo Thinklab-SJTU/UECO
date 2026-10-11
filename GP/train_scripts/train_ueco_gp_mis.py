@@ -26,9 +26,7 @@ TRAIN_FOLDER_DICT = {
 VAL_PATH_DICT = {
     ("MIS", "RB", "200-300"): "../data/test/MIS/mis_rb-small_kamis_10s_20.09.txt",
     ("MIS", "RB", "800-1200"): "../data/test/MIS/mis_rb-large_kamis-60s_43.004.txt",
-    ("MIS", "RB", "2000-3000"): "../data/test/MIS/mis_rb-giant_kamis-60s_49.260.txt",
     ("MIS", "ER", "700-800"): "../data/test/MIS/mis_er-700-800_kamis-60s_44.96875.txt",
-    ("MIS", "ER", "1400-1600"): "../data/test/MIS/mis_er-1400-1600_kamis-60s_50.9375.txt",
     ("MIS", "SATLIB", None): "../data/test/MIS/mis_satlib_kamis_10s_425.954.txt"
 }
 
@@ -74,7 +72,7 @@ if __name__ == "__main__":
             train_batch_size=BATCH_SIZE_DICT[TRAIN_TYPE[2]],
             val_batch_size=1,
             sparse_factor=1, 
-            device="cuda",
+            device="cuda:0",
             train_folder=TRAIN_FOLDER_DICT[TRAIN_TYPE],
             val_path=VAL_PATH_DICT[TRAIN_TYPE],
             store_data=False # set False if your server's memory is not large enough.
@@ -93,7 +91,7 @@ if __name__ == "__main__":
 
     run_name = f"{TRAIN_TYPE[0]}_{TRAIN_TYPE[1]}_{TRAIN_TYPE[2]}_GP_UECO_{formatted_time}"
     trainer = Trainer(
-        model=model, devices=[0,1], max_epochs=50,
+        model=model, devices=[0], max_epochs=50,
         wandb_logger_name=run_name,
         ckpt_monitor="val/costs_avg",
         ckpt_filename="epoch={epoch}-obj={val/costs_avg:.5f}",

@@ -11,7 +11,7 @@ from model import UECOModel, UECOEncoder, COExpanderDecoder
 from env import COExpanderEnv
 
 
-TRAIN_TYPE = ("MCut", "BA", "800-1200")
+TRAIN_TYPE = ("MCut", "BA", "200-300")
 
 TRAIN_FOLDER_DICT = {
     ("MCut", "BA", "200-300"): "../data/train/MCut/MCut_BA-SMALL_Gurobi-60s",
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             val_batch_size=1,
             num_workers=4,
             sparse_factor=1,
-            device="cuda",
+            device="cuda:0",
             train_folder=TRAIN_FOLDER_DICT[TRAIN_TYPE],
             val_path=VAL_PATH_DICT[TRAIN_TYPE],
             store_data=False # set False if your server's memory is not large enough.
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     run_name = f"{TRAIN_TYPE[0]}_{TRAIN_TYPE[1]}_{TRAIN_TYPE[2]}_AE_UECO_{formatted_time}"
     trainer = Trainer(
-        model=model, devices=[0,1,2], max_epochs=50,
+        model=model, devices=[0], max_epochs=50,
         wandb_logger_name=run_name,
         ckpt_monitor="val/costs_avg",
         ckpt_filename="epoch={epoch}-obj={val/costs_avg:.5f}",

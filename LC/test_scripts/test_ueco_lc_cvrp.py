@@ -33,7 +33,7 @@ from CVRPTester_UECO import CVRPTester as Tester
 
 ##########################################################################################
 # parameters
-TEST_DATA = ("CVRP", "uniform", 500)
+TEST_DATA = ("CVRP", "uniform", 50)
 NODES_NUM = TEST_DATA[-1]
 NUM_AUG = 16
 USE_LS = True

@@ -20,7 +20,7 @@ NODES_NUM = "200-300"
 TEST_TYPE = (TASK, "RB", NODES_NUM)
 
 # Solving Settings
-DEVICE = "cpu"
+DEVICE = "cuda:0"
 SOLVING_SETTINGS = ("greedy", None) # ("greedy", "rlsa") / ("beam", None) / ("beam", "rlsa")
 
 # Model Settings
@@ -48,9 +48,7 @@ encoder_params = {
 RLSA_SETTINGS_DICT = {
     ("MIS", "RB", "200-300"): (0.01, 5, 1000, 500, 1.02, 0.3),
     ("MIS", "RB", "800-1200"): (0.01, 5, 1000, 1000, 1.02, 0.3),
-    ("MIS", "RB", "2000-3000"): (0.01, 5, 1000, 1000, 1.02, 0.3),
     ("MIS", "ER", "700-800"): (0.2, 10, 1000, 1000, 1.001, 0.3),
-    ("MIS", "ER", "1400-1600"): (0.2, 10, 1000, 1000, 1.001, 0.3),
     ("MIS", "SATLIB", None): (0.01, 2, 1000, 1000, 1.02, 0.3),
 }
 
@@ -114,7 +112,7 @@ if __name__ == "__main__":
                 rlsa_t=rlsa_settings[3],
                 rlsa_beta=rlsa_settings[4],
                 rlsa_alpha=rlsa_settings[5],
-                rlsa_device="cuda"
+                rlsa_device=DEVICE
             ),
             weight_path=check_and_ckpt_to_pt(
                 WEIGHT_PATH_DICT[TEST_TYPE],

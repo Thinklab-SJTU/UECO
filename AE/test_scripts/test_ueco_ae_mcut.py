@@ -40,7 +40,6 @@ encoder_params = {
 RLSA_SETTINGS_DICT = {
     ("MCut", "BA", "200-300"): (1, 20, 1000, 1000),
     ("MCut", "BA", "800-1200"): (1, 50, 1000, 1000),
-    ("MCut", "BA", "2000-3000"): (1, 100, 1000, 1000)
 }
 
 # COExpander Settings

@@ -22,33 +22,24 @@ TRAIN_FOLDER_DICT = {
     ("TSP", "uniform", 50): "../data/train/TSP/TSP50_Uniform_Concorde",
     ("TSP", "uniform", 100): "../data/train/TSP/TSP100_Uniform_Concorde",
     ("TSP", "uniform", 500): "../data/train/TSP/TSP500_Uniform_Concorde",
-    ("TSP", "uniform", 1000): "../data/train/TSP/TSP1000_Uniform_LKH-1000",
-    ("TSP", "uniform", 10000): "../data/train/TSP/TSP10000_Uniform_ALKH-1000"
 }
 
 VAL_PATH_DICT = {
     ("TSP", "uniform", 50): "../data/test/TSP/tsp50_concorde_5.68759.txt",
     ("TSP", "uniform", 100): "../data/test/TSP/tsp100_concorde_7.75585.txt",
     ("TSP", "uniform", 500): "../data/test/TSP/tsp500_concorde_16.54581.txt",
-    ("TSP", "uniform", 1000): "../data/test/TSP/tsp1000_concorde_23.11812.txt",
-    ("TSP", "uniform", 10000): "../data/test/TSP/tsp10000_lkh_500_71.75483.txt",
-    ("TSP", "uniform", 100000): "../data/test/TSP/tsp100000_lkh_1_226.26067.txt"
 }
 
 VAL_SAMPLES_DICT = {
     50: 1280,
     100: 1280,
     500: 128,
-    1000: 128,
-    10000: 16
 }
 
 BATCH_SIZE_DICT = {
     50: 20,
     100: 16,
     500: 3,
-    1000: 1,
-    10000: 1
 }
 
 encoder_params = {
@@ -78,7 +69,7 @@ if __name__ == "__main__":
             train_batch_size=BATCH_SIZE_DICT[TRAIN_TYPE[2]],
             val_batch_size=1,
             sparse_factor=SPARSE_TYPE[1], 
-            device="cuda",
+            device="cuda:0",
             train_folder=TRAIN_FOLDER_DICT[TRAIN_TYPE],
             val_path=VAL_PATH_DICT[TRAIN_TYPE],
             store_data=False # set False if your server's memory is not large enough.
@@ -97,7 +88,7 @@ if __name__ == "__main__":
 
     run_name = f"{TRAIN_TYPE[0]}{TRAIN_TYPE[2]}_GP_UECO_{formatted_time}"
     trainer = Trainer(
-        model=model, devices=[0, 1, 4], max_epochs=100,
+        model=model, devices=[0], max_epochs=100,
         wandb_logger_name=run_name,
         ckpt_monitor="val/costs_avg",
         ckpt_filename="epoch={epoch}-obj={val/costs_avg:.5f}",
