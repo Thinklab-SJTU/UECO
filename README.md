@@ -150,3 +150,17 @@ Edit the configuration block in the script to select the dataset, GPU, batch siz
 ## 📚 Acknowledgements
 
 The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet), [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit), and [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101).
+
+## 📝 Citation
+
+```bibtex
+@inproceedings{
+UECO,
+title={{UECO}: A Unified Encoder for Neural Combinatorial Optimization via Iterative Edge-Node Reasoning},
+author={Wenzheng Pan and Shuyi Yan and Nuoyan Chen and Yiyang Qu and Jiale Ma and Junchi Yan},
+booktitle={The Fortieth Annual Conference on Neural Information Processing Systems},
+year={2026}
+}
+```
+
+Please use the BibTeX entry exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
