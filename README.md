@@ -1,6 +1,6 @@
 # UECO: A Unified Encoder for Neural Combinatorial Optimization with Iterative Edge-Node Reasoning
 
-This is the official implementation of our NeurIPS 2026 paper "[UECO: A Unified Encoder for Neural Combinatorial Optimization with Iterative Edge-Node Reasoning](https://openreview.net/forum?id=M2lqt23VO7)" | [![NeurIPS 2026 Oral](https://img.shields.io/badge/NeurIPS-2026%20Oral-b31b1b.svg)](paper_preview.pdf) [[paper preview*](paper_preview.pdf)]
+This is the official implementation of our NeurIPS 2026 paper "[**UECO: A Unified Encoder for Neural Combinatorial Optimization with Iterative Edge-Node Reasoning**](https://openreview.net/forum?id=M2lqt23VO7)" | [![NeurIPS 2026 Oral](https://img.shields.io/badge/NeurIPS-2026%20Oral-b31b1b.svg)](paper_preview.pdf) [[paper preview*](paper_preview.pdf)]
 
 **Authors**: [**Wenzheng Pan**](https://wzever.github.io/) · [**Shuyi Yan**](https://www.cozease.cn/) · [**Nuoyan Chen**](https://cny123222.github.io/about/) · [**Yiyang Qu**](https://github.com/Qyy12345) · [**Jiale Ma**](https://heatingma.github.io/) · [**Junchi Yan**](https://thinklab.sjtu.edu.cn)
 
