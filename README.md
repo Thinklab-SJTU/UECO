@@ -143,3 +143,8 @@ python train_scripts/train_ueco_lc_cvrp.py
 ```
 
 Edit the configuration block in the script to select the dataset, GPU, batch size, and number of epochs.
+
+
+## 📚 Acknowledgements
+
+The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet), [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit), and [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101).
