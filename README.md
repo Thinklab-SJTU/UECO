@@ -149,7 +149,7 @@ Edit the configuration block in the script to select the dataset, GPU, batch siz
 
 ## 📚 Acknowledgements
 
-The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet), [Fast-T2T](), [COExpander](https://github.com/Thinklab-SJTU/COExpander), [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit), and [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101).
+The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet), [Fast-T2T](https://github.com/Thinklab-SJTU/Fast-T2T), [COExpander](https://github.com/Thinklab-SJTU/COExpander), [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit), and [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101).
 
 ## 📝 Citation
 
