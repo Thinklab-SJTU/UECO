@@ -165,4 +165,4 @@ year={2026}
 }
 ```
 
-Note: We recommend using the BibTeX entry directly exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
+Note: We recommend using the BibTeX entry directly exported from [OpenReview](https://openreview.net/forum?id=M2lqt23VO7) after the camera-ready version is publicly available as the authoritative citation.
