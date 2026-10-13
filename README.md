@@ -149,9 +149,11 @@ Edit the configuration block in the script to select the dataset, GPU, batch siz
 
 ## 📚 Acknowledgements
 
-The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet), [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit), and [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101).
+The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet), [Fast-T2T](), [COExpander](https://github.com/Thinklab-SJTU/COExpander), [ML4CO-Kit](https://github.com/Thinklab-SJTU/ML4CO-Kit), and [ML4CO-Bench-101](https://github.com/Thinklab-SJTU/ML4CO-Bench-101).
 
 ## 📝 Citation
+
+If you find COExpander valuable for your research or applied projects:
 
 ```bibtex
 @inproceedings{
@@ -163,4 +165,4 @@ year={2026}
 }
 ```
 
-Please use the BibTeX entry exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
+Note: We recommend using the BibTeX entry directly exported from OpenReview after the camera-ready version is publicly available as the authoritative citation.
