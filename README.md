@@ -153,7 +153,7 @@ The implementations partly build on [MatNet](https://github.com/yd-kwon/MatNet),
 
 ## 📝 Citation
 
-If you find COExpander valuable for your research or applied projects:
+If you find UECO valuable for your research or applied projects:
 
 ```bibtex
 @inproceedings{
